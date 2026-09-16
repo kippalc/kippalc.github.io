@@ -74,10 +74,12 @@ Knöpfen kein Apfel.
 
 ## Veröffentlichen (GitHub Pages)
 
-Die Seite liegt unter <https://kippalc.github.io/> (Repository `kippalc/kippalc.github.io`).
-Die App und der Store-Eintrag verlinken fest `https://kippalc.github.io/datenschutz.html` –
-deshalb baut Astro Dateien statt Ordner (`build.format: 'file'`), und diese Adresse bleibt
-bestehen.
+Die Seite liegt unter <https://kippscan.de/> (Repository `kippalc/kippalc.github.io`, GitHub Pages
+mit eigener Domain; `kippalc.github.io` leitet dauerhaft dorthin um). Die DNS-Einträge liegen bei
+united-domains: vier A- und vier AAAA-Einträge auf die GitHub-Pages-Adressen, `www` als CNAME auf
+`kippalc.github.io`. Die App und der Store-Eintrag verlinken fest `https://kippscan.de/datenschutz.html`
+und `/impressum.html` – deshalb baut Astro Dateien statt Ordner (`build.format: 'file'`), und diese
+Adressen bleiben bestehen.
 
 Entweder den Inhalt von `dist/` nach einem `npm run build` in das Pages-Repository kopieren,
 oder den mitgelieferten Workflow benutzen (`.github/workflows/deploy.yml`): Er baut bei jedem

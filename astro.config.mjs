@@ -2,11 +2,12 @@
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
 
-// Die Seiten liegen auf GitHub Pages (kippalc.github.io). Die App verlinkt
-// `datenschutz.html` und `impressum.html` fest – deshalb `format: 'file'`,
-// damit diese Adressen genau so bestehen bleiben.
+// Die Seiten liegen auf GitHub Pages unter der eigenen Domain kippscan.de
+// (kippalc.github.io leitet dorthin um). Die App verlinkt `datenschutz.html`
+// und `impressum.html` fest – deshalb `format: 'file'`, damit diese Adressen
+// genau so bestehen bleiben.
 export default defineConfig({
-  site: 'https://kippalc.github.io',
+  site: 'https://kippscan.de',
   trailingSlash: 'never',
   compressHTML: true,
   devToolbar: { enabled: false },

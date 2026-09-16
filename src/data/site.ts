@@ -16,7 +16,7 @@ export const APP_STORE_URL = '';
 
 export const SITE = {
   name: 'KippScan',
-  url: 'https://kippalc.github.io',
+  url: 'https://kippscan.de',
   /** Untertitel wie im Store-Eintrag – 30 Zeichen. */
   tagline: 'Karten per Nummer erkennen',
   description:
