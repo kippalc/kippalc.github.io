@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /intern/
+
+Sitemap: https://kippalc.github.io/sitemap-index.xml

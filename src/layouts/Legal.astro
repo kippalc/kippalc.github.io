@@ -1,0 +1,134 @@
+---
+/**
+ * Rahmen für die rechtlichen Seiten – ruhig, lesbar, dieselbe Formsprache.
+ * Lange deutsche Komposita brechen um, statt schmale Bildschirme zu sprengen.
+ */
+import Base from './Base.astro';
+
+interface Props {
+  title: string;
+  description: string;
+  path: string;
+  untertitel?: string;
+}
+const { title, description, path, untertitel } = Astro.props;
+---
+
+<Base title={title} description={description} path={path} minimal>
+  <article class="legal">
+    <div class="container legal__inner">
+      <header class="legal__head">
+        <h1 class="h2">{title}</h1>
+        {untertitel && <p class="legal__sub">{untertitel}</p>}
+      </header>
+      <div class="legal__body">
+        <slot />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .legal {
+    padding-block: clamp(3rem, 7vw, 5rem) clamp(4rem, 8vw, 6rem);
+  }
+
+  .legal__inner {
+    max-width: 46rem;
+  }
+
+  .legal__head {
+    display: grid;
+    gap: 0.75rem;
+    margin-bottom: clamp(2rem, 5vw, 3rem);
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .legal__sub {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .legal__body {
+    font-size: 1rem;
+    line-height: 1.7;
+    color: var(--text-soft);
+  }
+
+  .legal__body :global(h2) {
+    margin: 2.4rem 0 0.7rem;
+    font-size: 1.25rem;
+    color: var(--text);
+  }
+
+  .legal__body :global(h3) {
+    margin: 1.6rem 0 0.5rem;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .legal__body :global(p),
+  .legal__body :global(li),
+  .legal__body :global(td),
+  .legal__body :global(th),
+  .legal__body :global(h2),
+  .legal__body :global(h3) {
+    overflow-wrap: anywhere;
+    hyphens: auto;
+  }
+
+  .legal__body :global(p + p) {
+    margin-top: 0.8rem;
+  }
+
+  .legal__body :global(ul) {
+    padding-left: 1.2rem;
+    margin: 0.6rem 0;
+  }
+
+  .legal__body :global(li + li) {
+    margin-top: 0.3rem;
+  }
+
+  .legal__body :global(address) {
+    font-style: normal;
+    margin: 0.4rem 0 0;
+    color: var(--text);
+  }
+
+  .legal__body :global(strong) {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .legal__body :global(.leise) {
+    color: var(--text-muted);
+    font-size: 0.9375rem;
+  }
+
+  .legal__body :global(.tabelle) {
+    overflow-x: auto;
+    margin: 0.8rem 0;
+  }
+
+  .legal__body :global(table) {
+    border-collapse: collapse;
+    width: 100%;
+    font-size: 0.9375rem;
+  }
+
+  .legal__body :global(td),
+  .legal__body :global(th) {
+    border-bottom: 1px solid var(--hairline);
+    padding: 0.55rem 0.6rem;
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .legal__body :global(th) {
+    color: var(--text);
+    font-weight: 600;
+  }
+</style>

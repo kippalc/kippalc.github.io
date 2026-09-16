@@ -1,0 +1,314 @@
+---
+import { Image } from 'astro:assets';
+import icon from '../assets/icon-1024.png';
+import { NAV, SITE } from '../data/site';
+import AppStoreButton from './AppStoreButton.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  minimal?: boolean;
+}
+const { minimal = false } = Astro.props;
+const home = minimal ? '/' : '#top';
+---
+
+<header class="nav" data-nav>
+  <div class="container nav__inner">
+    <a class="nav__brand" href={home} aria-label={`${SITE.name} – Startseite`}>
+      <Image src={icon} alt="" width={56} height={56} class="nav__icon" loading="eager" />
+      <span class="nav__word">{SITE.name}</span>
+    </a>
+
+    {
+      !minimal && (
+        <nav class="nav__links" aria-label="Seitenbereiche">
+          {NAV.map((item) => (
+            <a href={item.href}>{item.label}</a>
+          ))}
+        </nav>
+      )
+    }
+
+    <div class:list={['nav__cta', { 'nav__cta--always': minimal }]}>
+      {minimal ? <a class="btn btn--ghost btn--sm" href="/">Zur Startseite</a> : <AppStoreButton size="sm" />}
+    </div>
+
+    {
+      !minimal && (
+        <button
+          class="nav__toggle"
+          type="button"
+          aria-expanded="false"
+          aria-controls="mobile-menu"
+          aria-label="Menü öffnen"
+          data-nav-toggle
+        >
+          <span class="nav__toggle-open">
+            <Icon name="menu" size={22} />
+          </span>
+          <span class="nav__toggle-close">
+            <Icon name="close" size={22} />
+          </span>
+        </button>
+      )
+    }
+  </div>
+
+</header>
+
+<!-- Das mobile Menü liegt außerhalb des Kopfes: dessen backdrop-filter
+     würde sonst zum Bezugsrahmen für position: fixed. -->
+{
+  !minimal && (
+    <div class="nav__mobile" id="mobile-menu" hidden data-nav-menu>
+      <nav aria-label="Seitenbereiche (mobil)">
+        {NAV.map((item) => (
+          <a href={item.href}>
+            {item.label}
+            <Icon name="arrow-up-right" size={18} />
+          </a>
+        ))}
+      </nav>
+      <div class="nav__mobile-cta">
+        <AppStoreButton />
+      </div>
+    </div>
+  )
+}
+
+<style>
+  .nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    height: var(--nav-h);
+    background: rgba(10, 10, 10, 0.55);
+    -webkit-backdrop-filter: saturate(140%) blur(18px);
+    backdrop-filter: saturate(140%) blur(18px);
+    transition: background-color 0.3s;
+  }
+
+  .nav::after {
+    content: '';
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.14), transparent);
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .nav.is-scrolled {
+    background: rgba(10, 10, 10, 0.78);
+  }
+
+  .nav.is-scrolled::after {
+    opacity: 1;
+  }
+
+  .nav__inner {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+  }
+
+  .nav__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.65rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-size: 1.125rem;
+    border-radius: 999px;
+  }
+
+  .nav__icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 7px;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.12);
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 0.25rem;
+    margin-inline: auto;
+  }
+
+  .nav__links a {
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition:
+      color 0.2s,
+      background-color 0.2s;
+  }
+
+  .nav__links a:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .nav__links a.is-current {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .nav__cta {
+    margin-left: auto;
+  }
+
+  .nav__toggle {
+    display: none;
+    width: 44px;
+    height: 44px;
+    margin-right: -10px;
+    border-radius: 999px;
+    color: var(--text);
+    place-items: center;
+  }
+
+  .nav__toggle-close {
+    display: none;
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-open {
+    display: none;
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-close {
+    display: block;
+  }
+
+  .nav__mobile {
+    position: fixed;
+    inset: var(--nav-h) 0 0 0;
+    z-index: 49;
+    background: rgba(10, 10, 10, 0.94);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+    padding: 1rem var(--gutter) 2rem;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .nav__mobile[hidden] {
+    display: none;
+  }
+
+  .nav__mobile nav {
+    display: grid;
+  }
+
+  .nav__mobile nav a {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.05rem 0.25rem;
+    font-size: 1.375rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    border-bottom: 1px solid var(--hairline);
+    color: var(--text);
+  }
+
+  .nav__mobile nav a svg {
+    color: var(--text-muted);
+  }
+
+  .nav__mobile-cta {
+    display: grid;
+  }
+
+  @media (max-width: 900px) {
+    .nav__links {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .nav__cta:not(.nav__cta--always) {
+      display: none;
+    }
+
+    .nav__toggle {
+      display: grid;
+      margin-left: auto;
+    }
+  }
+
+  @media (min-width: 641px) {
+    .nav__mobile {
+      display: none !important;
+    }
+  }
+</style>
+
+<script>
+  const header = document.querySelector<HTMLElement>('[data-nav]');
+  const toggle = document.querySelector<HTMLButtonElement>('[data-nav-toggle]');
+  const menu = document.querySelector<HTMLElement>('[data-nav-menu]');
+
+  if (header) {
+    const onScroll = () => header.classList.toggle('is-scrolled', window.scrollY > 12);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // Der Abschnitt im Bild bekommt seinen Eintrag in der Leiste.
+    const links = Array.from(header.querySelectorAll<HTMLAnchorElement>('.nav__links a[href^="#"]'));
+    const ziele = links.map((a) => document.getElementById(a.hash.slice(1))).filter((el): el is HTMLElement => !!el);
+    if (ziele.length && 'IntersectionObserver' in window) {
+      const sichtbar = new Map<Element, number>();
+      const markiere = () => {
+        let bester: Element | null = null;
+        let max = 0;
+        sichtbar.forEach((ratio, el) => {
+          if (ratio > max) {
+            max = ratio;
+            bester = el;
+          }
+        });
+        links.forEach((a) => {
+          const aktiv = !!bester && a.hash === `#${(bester as HTMLElement).id}`;
+          a.classList.toggle('is-current', aktiv);
+          if (aktiv) a.setAttribute('aria-current', 'location');
+          else a.removeAttribute('aria-current');
+        });
+      };
+      const io = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((e) => sichtbar.set(e.target, e.isIntersecting ? e.intersectionRatio : 0));
+          markiere();
+        },
+        { rootMargin: '-40% 0px -45% 0px', threshold: [0, 0.1, 0.25, 0.5, 0.75, 1] },
+      );
+      ziele.forEach((el) => io.observe(el));
+    }
+  }
+
+  if (toggle && menu) {
+    const setOpen = (open: boolean) => {
+      toggle.setAttribute('aria-expanded', String(open));
+      toggle.setAttribute('aria-label', open ? 'Menü schließen' : 'Menü öffnen');
+      menu.hidden = !open;
+      document.documentElement.style.overflow = open ? 'hidden' : '';
+    };
+
+    toggle.addEventListener('click', () => setOpen(menu.hidden === true));
+    menu.querySelectorAll('a').forEach((a) => a.addEventListener('click', () => setOpen(false)));
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !menu.hidden) {
+        setOpen(false);
+        toggle.focus();
+      }
+    });
+    window.matchMedia('(min-width: 641px)').addEventListener('change', (e) => {
+      if (e.matches) setOpen(false);
+    });
+  }
+</script>

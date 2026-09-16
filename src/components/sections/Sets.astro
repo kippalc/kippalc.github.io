@@ -1,0 +1,164 @@
+---
+/**
+ * Sets: Fortschritt, fehlende Karten, Restkosten, Wunschliste. Zwei echte
+ * Screens – „Meine Sets“ (aus dem Simulator) und die Wunschliste (Store) –
+ * und die Ringe der App, nachgebaut und animiert.
+ */
+import meineSets from '../../assets/screens/meine-sets.png';
+import Icon from '../Icon.astro';
+import PhoneFrame from '../PhoneFrame.astro';
+import SetDetailDemo from '../SetDetailDemo.astro';
+
+// Die Ringe zeigt der Screenshot; die Set-Ansicht daneben ist zum Anfassen.
+
+---
+
+<section class="sets section" id="sets">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <h2 class="h2">Ganze Sets im Blick.</h2>
+      <p class="lead">
+        Die Sammlung beantwortet „Was habe ich?“. Der Sets-Reiter die andere Hälfte: Was fehlt noch – und
+        was kostet der Rest?
+      </p>
+    </div>
+
+    <div class="sets__stage">
+      <div class="sets__phones reveal">
+        <PhoneFrame
+          screen={meineSets}
+          alt="Sets-Reiter in KippScan: 688 von 1.468 Karten in 9 Sets, darunter Stellarkrone mit 70 % und „42 fehlen · ≈ 5,40 €“."
+          class="sets__phone"
+          sizes="(max-width: 640px) 78vw, 340px"
+        />
+      </div>
+
+      <div class="sets__demo reveal" style="--delay:.12s">
+        <SetDetailDemo />
+        <p class="sets__demo-hint">Set-Ansicht zum Anfassen: Alle, Fehlend, Meine – die Zahlen sind echt.</p>
+      </div>
+    </div>
+
+    <ul class="sets__features">
+      <li class="reveal">
+        <Icon name="euro" size={22} />
+        <h3>Was kostet der Rest?</h3>
+        <p>Die Summe der fehlenden Karten aus Cardmarkets Tagesliste – in jeder Zeile als Größenordnung, im Set genau, mit Variantenrechnung.</p>
+      </li>
+      <li class="reveal" style="--delay:.06s">
+        <Icon name="circle-dashed" size={22} />
+        <h3>Filter „Fehlend“</h3>
+        <p>Der Einkaufszettel. Günstige fehlende Karten stehen grün, jede Kachel trägt ihren Preis. Ein Tipp: „Habe ich doch – aufnehmen“.</p>
+      </li>
+      <li class="reveal" style="--delay:.12s">
+        <Icon name="star" size={22} />
+        <h3>Wunschliste</h3>
+        <p>Karten vormerken, nach Preis sortieren – und sehen, was sie kosten, wenn du geduldig nach dem günstigsten Angebot suchst.</p>
+      </li>
+      <li class="reveal" style="--delay:.18s">
+        <Icon name="doc" size={22} />
+        <h3>Fehlliste als Text</h3>
+        <p>Fehlliste je Set, Tauschliste (nur Doppelte) und Wunschliste zum Weitergeben – in die Tauschgruppe, zum Händler.</p>
+      </li>
+      <li class="reveal" style="--delay:.24s">
+        <Icon name="layers" size={22} />
+        <h3>Alle Drucke eines Pokémon</h3>
+        <p>Welche Gluraks hast du, welche fehlen – quer durch alle Sets. 105 Drucke in 45 Sets, im Verzeichnis nachgezählt.</p>
+      </li>
+      <li class="reveal" style="--delay:.3s">
+        <Icon name="brush" size={22} />
+        <h3>Sammeln nach Illustrator</h3>
+        <p>„Alles von Mitsuhiro Arita“ ist ein Sammelziel wie ein Set – nur über Dutzende Sets verstreut. 386 Namen, mitgeliefert.</p>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<style>
+  .sets__stage {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem);
+    align-items: center;
+    justify-items: center;
+    margin-bottom: clamp(3rem, 7vw, 5rem);
+  }
+
+  .sets__phones {
+    display: flex;
+    justify-content: center;
+  }
+
+  .sets__phone {
+    --phone-w: 340px;
+    width: var(--phone-w);
+    max-width: 100%;
+  }
+
+  .sets__demo {
+    display: grid;
+    justify-items: center;
+    gap: 0.75rem;
+    width: 100%;
+  }
+
+  .sets__demo-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  .sets__features {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sets__features li {
+    display: grid;
+    gap: 0.5rem;
+    align-content: start;
+  }
+
+  .sets__features svg {
+    color: var(--text-soft);
+    margin-bottom: 0.25rem;
+  }
+
+  .sets__features h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .sets__features p {
+    font-size: 0.9375rem;
+    color: var(--text-soft);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 960px) {
+    .sets__stage {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .sets__features {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 640px) {
+    .sets__phone {
+      --phone-w: 300px;
+    }
+
+    .sets__features {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+  }
+</style>

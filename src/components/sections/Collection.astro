@@ -1,0 +1,195 @@
+---
+/**
+ * Die Sammlung – echter Screenshot aus der App (Store-Fassung, Marktwert
+ * 2.733,53 €), daneben die Zustandsleiter zum Anfassen.
+ */
+import sammlung from '../../assets/screens/sammlung.png';
+import ConditionLadder from '../ConditionLadder.astro';
+import Icon from '../Icon.astro';
+import PhoneFrame from '../PhoneFrame.astro';
+---
+
+<section class="col section" id="sammlung">
+  <div class="container col__grid">
+    <div class="section-head col__head reveal">
+      <h2 class="h2">Deine Sammlung. In Zahlen, die stimmen.</h2>
+      <p class="lead">
+        Jede Position mit Zustand, Stückzahl, Kaufpreis und Kaufdatum. Darüber der Marktwert – und was du
+        beim schnellen Verkauf ungefähr bekämst.
+      </p>
+    </div>
+
+    <div class="col__visual reveal">
+      <PhoneFrame
+        screen={sammlung}
+        alt="Sammlung in KippScan: Marktwert 2.733,53 €, Verlaufskurve, Sofortverkauf 1.101,28 €, 534 Karten in 511 Positionen, darunter Glurak aus dem Grundset mit 594,65 €."
+        class="col__phone"
+      />
+    </div>
+
+    <div class="col__copy">
+
+      <div class="col__ladder glass reveal" style="--delay:.1s">
+        <div class="col__ladder-head">
+          <div>
+            <p class="col__ladder-title">Zustand</p>
+            <p class="col__ladder-sub">Mew-ex · 151 · Nr. 205 – Marktwert bei Near Mint 26,93 €</p>
+          </div>
+          <Icon name="chevron-up-down" size={16} class="muted" />
+        </div>
+        <ConditionLadder referenz={26.93} />
+        <p class="col__ladder-note">
+          Sieben Cardmarket-Stufen. Was die Wahl kostet, steht schon bei der Auswahl dabei – das ist der
+          Grund, warum man den Zustand überhaupt erfasst.
+        </p>
+      </div>
+
+      <ul class="col__list reveal" style="--delay:.18s">
+        <li>
+          <strong>Zwei Zahlen statt einer.</strong> Marktwert ist, was Verkäufer aufrufen. Sofortverkauf
+          ist der Tiefstpreis abzüglich 5 % Gebühr – was du bekommst, nicht was du forderst.
+        </li>
+        <li>
+          <strong>Serienmodus für Stapel.</strong> Sichere Treffer wandern ohne Zwischentippen hinein, auf
+          Wunsch mit dem Kaufpreis, den der Stapel gekostet hat. Unsichere halten an und fragen nach.
+        </li>
+        <li>
+          <strong>Suchen, sortieren, gliedern.</strong> Nach Name, Set oder Nummer suchen, nach Neueste, Wert,
+          Name oder Set sortieren, als Liste oder Raster – nach Set gegliedert, einklappbar. Positionen aus
+          unsicheren Treffern stehen oben als „zu prüfen“.
+        </li>
+        <li>
+          <strong>Notiz und eigene Fotos je Position.</strong> Lagerort, Herkunft, der Zustand des
+          Exemplars – und Stapelaktionen, wenn du zwanzig Karten auf einmal umstellen willst.
+        </li>
+        <li>
+          <strong>Karten, gegradete Karten und versiegelte Ware</strong> in einer Sammlung, umschaltbar
+          oben im Reiter – eine Zahl über alles.
+        </li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .col__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    grid-template-areas:
+      'visual head'
+      'visual copy';
+    column-gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .col__head {
+    grid-area: head;
+    margin-bottom: 1.75rem;
+  }
+
+  .col__visual {
+    grid-area: visual;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+
+  .col__copy {
+    grid-area: copy;
+  }
+
+  .col__phone {
+    --phone-w: 380px;
+  }
+
+  .col__copy {
+    display: grid;
+    gap: 1.75rem;
+  }
+
+  .col__ladder {
+    display: grid;
+    gap: 1rem;
+    padding: 1.25rem 1.3rem 1.3rem;
+    max-width: 520px;
+  }
+
+  .col__ladder-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+
+  .col__ladder-title {
+    font-weight: 600;
+  }
+
+  .col__ladder-sub {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .col__ladder-note {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .col__list {
+    display: grid;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    max-width: 36em;
+  }
+
+  .col__list li {
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--text-soft);
+    font-size: 0.9375rem;
+    text-wrap: pretty;
+  }
+
+  .col__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .col__list strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .col__grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'head'
+        'visual'
+        'copy';
+      row-gap: 2.5rem;
+    }
+
+    .col__head {
+      margin-bottom: 0;
+    }
+
+    .col__visual {
+      position: static;
+    }
+
+    .col__phone {
+      --phone-w: 340px;
+    }
+  }
+</style>

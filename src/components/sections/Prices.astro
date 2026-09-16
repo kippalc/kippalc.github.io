@@ -1,0 +1,419 @@
+---
+/**
+ * Preise: Cardmarket-Tagesliste, selbst aufgezeichneter Verlauf, größte
+ * Bewegungen – und die ehrliche Einordnung. Zahlen aus dem Store-Screenshot
+ * (Marktwert 2.733,53 €, Sofortverkauf 1.101,28 €).
+ */
+import wertverlauf from '../../assets/screens/wertverlauf.png';
+import Icon from '../Icon.astro';
+import PhoneFrame from '../PhoneFrame.astro';
+import Sparkline from '../Sparkline.astro';
+
+// Ein Kartenverlauf über 31 Tage: die ersten Tage rekonstruiert aus ⌀30/⌀7,
+// dann gemessen – so, wie das Diagramm im Positionsblatt es unterscheidet.
+const verlauf = [
+  356.4, 358.1, 359.9, 361.6, 363.4, 365.1, 366.9, 368.6, 370.4, 372.1, 373.9, 375.6, 377.4, 379.1,
+  380.9, 382.6, 384.4, 386.1, 387.9, 389.6, 391.4, 393.1, 394.9, 396.6, 398.0, 402.5, 399.8, 405.4,
+  412.9, 418.6, 422.69,
+];
+const gemessen = [24, 25, 26, 27, 28, 29, 30];
+---
+
+<section class="prices section" id="preise">
+  <div class="container prices__grid">
+    <div class="section-head prices__head reveal">
+      <h2 class="h2">Preise, die du einordnen kannst.</h2>
+      <p class="lead">
+        Aus Cardmarkets öffentlicher Tagesliste, in Euro. Durchschnitte tatsächlicher Verkäufe vom
+        europäischen Markt – keine Angebote, keine Umrechnung aus Dollar.
+      </p>
+    </div>
+
+    <div class="prices__copy">
+
+      <div class="prices__two glass reveal" style="--delay:.08s">
+        <div class="prices__two-col">
+          <p class="eyebrow">Marktwert</p>
+          <p class="prices__big num">2.733,53 €</p>
+          <p class="prices__delta num"><Icon name="arrow-up-right" size={11} stroke={3} />+283,17 € <span>+10 %</span></p>
+          <p class="prices__small">Trend × Menge × Zustandsfaktor. Was Verkäufer aufrufen.</p>
+        </div>
+        <div class="prices__two-col">
+          <p class="eyebrow">Sofortverkauf</p>
+          <p class="prices__big num">1.101,28 €</p>
+          <p class="prices__delta prices__delta--muted">abzüglich 5 % Gebühr</p>
+          <p class="prices__small">Tiefstpreis × Menge × Zustandsfaktor. Was du beim schnellen Verkauf ungefähr bekommst.</p>
+        </div>
+      </div>
+
+      <div class="prices__chart glass reveal" style="--delay:.16s">
+        <div class="prices__chart-head">
+          <div>
+            <p class="prices__chart-title">Glurak-ex · 151 · Nr. 199</p>
+            <p class="prices__chart-sub num"><span class="up">Trend 422,69 €</span><span>⌀30 Tage 356,40 €</span><span>ab 220,00 €</span></p>
+          </div>
+        </div>
+        <div
+          class="prices__spark"
+          data-abtaster
+          data-werte={JSON.stringify(verlauf)}
+          data-referenz="356.4"
+          data-box="420,120,2.5"
+          data-ende="2026-09-15"
+        >
+          <Sparkline
+            werte={verlauf}
+            gemessen={gemessen}
+            referenz={{ wert: 356.4, label: '⌀30' }}
+            width={420}
+            height={120}
+            stroke={2.5}
+            id="karte"
+          />
+          <div class="prices__marke" hidden aria-hidden="true">
+            <i class="prices__marke-linie"></i>
+            <i class="prices__marke-punkt"></i>
+            <span class="prices__marke-text num"><b data-marke-wert></b><small data-marke-tag></small></span>
+          </div>
+        </div>
+        <p class="prices__legend">
+          <Icon name="info" size={13} stroke={2} />
+          7 von 31 Tagen gemessen (Punkte). Der Rest ist aus den Cardmarket-Durchschnitten rekonstruiert.
+        </p>
+      </div>
+
+      <ul class="prices__list reveal" style="--delay:.22s">
+        <li>
+          <strong>Der Verlauf wird selbst aufgezeichnet.</strong> Die Datenquelle liefert keinen – also
+          hält die App jeden Tag den Stand fest, auch im Hintergrund. Fehlende Tage werden rekonstruiert
+          und als solche gekennzeichnet, mit einem <span class="num">~</span> davor.
+        </li>
+        <li>
+          <strong>Größte Bewegungen</strong> in 7 oder 30 Tagen, sortiert nach Auswirkung in Euro – eine
+          Karte mit +40 % auf 0,05 € bewegt nichts.
+        </li>
+        <li>
+          <strong>Kurve abtasten.</strong> Finger auflegen, ziehen – über der Kurve stehen Wert und Datum
+          des nächstliegenden Tages. Dieselbe Geste wie in jeder Kurs-App.
+        </li>
+        <li>
+          <strong>Ehrlich benannt:</strong> Preise sind nicht nach Sprache getrennt, für deutsche Karten ist
+          der Wert eine Näherung. Nicht jede Karte hat bei Cardmarket ein Produkt – dort trägst du einen
+          eigenen Wert ein.
+        </li>
+      </ul>
+    </div>
+
+    <div class="prices__visual reveal" style="--delay:.1s">
+      <PhoneFrame
+        screen={wertverlauf}
+        alt="Wertverlauf in KippScan: 2.733,53 € mit +283,17 € in 30 Tagen, Kurve über den Monat, darunter die größten Bewegungen nach 7 Tagen, etwa Mega-Guardevoir-ex mit ~+19,52 €."
+        class="prices__phone"
+      />
+    </div>
+  </div>
+</section>
+
+<style>
+  .prices__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 0.8fr);
+    grid-template-areas:
+      'head visual'
+      'copy visual';
+    column-gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .prices__head {
+    grid-area: head;
+    margin-bottom: 1.5rem;
+  }
+
+  .prices__copy {
+    grid-area: copy;
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .prices__two {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 560px;
+  }
+
+  .prices__two-col {
+    display: grid;
+    gap: 0.35rem;
+    padding: 1.25rem 1.3rem;
+    align-content: start;
+  }
+
+  .prices__two-col + .prices__two-col {
+    border-left: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  .prices__big {
+    font-size: clamp(1.5rem, 2.6vw, 1.9rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    text-shadow: 0 0 14px rgba(255, 255, 255, 0.18);
+  }
+
+  .prices__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    width: fit-content;
+    padding: 0.2rem 0.55rem;
+    border-radius: 999px;
+    background: var(--up-soft);
+    box-shadow: inset 0 0 0 0.5px var(--up-edge);
+    color: var(--up);
+    font-size: 0.75rem;
+    font-weight: 600;
+  }
+
+  .prices__delta span {
+    opacity: 0.75;
+    font-weight: 500;
+  }
+
+  .prices__delta--muted {
+    background: none;
+    box-shadow: none;
+    color: var(--text-muted);
+    padding: 0.2rem 0;
+    font-weight: 500;
+  }
+
+  .prices__small {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    text-wrap: pretty;
+    margin-top: 0.3rem;
+  }
+
+  .prices__chart {
+    display: grid;
+    gap: 0.75rem;
+    padding: 1.15rem 1.3rem 1.1rem;
+    max-width: 560px;
+  }
+
+  .prices__chart-title {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .prices__chart-sub {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    font-size: 0.8125rem;
+    color: var(--text-soft);
+  }
+
+  .prices__spark {
+    position: relative;
+    touch-action: pan-y;
+    cursor: crosshair;
+  }
+
+  .prices__marke {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .prices__marke-linie {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--x, 50%);
+    width: 1px;
+    background: rgba(255, 255, 255, 0.35);
+  }
+
+  .prices__marke-punkt {
+    position: absolute;
+    left: var(--x, 50%);
+    top: var(--y, 50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--up);
+    box-shadow:
+      0 0 0 2px var(--ink),
+      0 0 8px var(--up);
+    transform: translate(-50%, -50%);
+  }
+
+  .prices__marke-text {
+    position: absolute;
+    left: var(--x, 50%);
+    top: 0;
+    display: grid;
+    gap: 0.05rem;
+    padding: 0.3rem 0.55rem;
+    border-radius: 7px;
+    background: var(--surface-top);
+    box-shadow: 0 6px 20px -8px rgba(0, 0, 0, 0.8);
+    transform: translate(var(--tx, -50%), 2px);
+    white-space: nowrap;
+    line-height: 1.2;
+  }
+
+  .prices__marke-text b {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .prices__marke-text small {
+    font-size: 0.6875rem;
+    color: var(--text-muted);
+  }
+
+  .prices__legend {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.4rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .prices__legend svg {
+    flex: none;
+    margin-top: 0.15rem;
+  }
+
+  .prices__list {
+    display: grid;
+    gap: 0.9rem;
+    margin: 0.5rem 0 0;
+    padding: 0;
+    list-style: none;
+    max-width: 36em;
+  }
+
+  .prices__list li {
+    position: relative;
+    padding-left: 1.4rem;
+    color: var(--text-soft);
+    font-size: 0.9375rem;
+    text-wrap: pretty;
+  }
+
+  .prices__list li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--text-muted);
+  }
+
+  .prices__list strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  .prices__visual {
+    grid-area: visual;
+    display: flex;
+    justify-content: center;
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+
+  .prices__phone {
+    --phone-w: 380px;
+  }
+
+  @media (max-width: 900px) {
+    .prices__grid {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'head'
+        'visual'
+        'copy';
+      row-gap: 2.5rem;
+    }
+
+    .prices__head {
+      margin-bottom: 0;
+    }
+
+    .prices__visual {
+      position: static;
+    }
+
+    .prices__phone {
+      --phone-w: 340px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .prices__two {
+      grid-template-columns: 1fr;
+    }
+
+    .prices__two-col + .prices__two-col {
+      border-left: 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+  }
+</style>
+
+<script>
+  // Die Kurve abtasten – Finger oder Maus auflegen, ziehen: Wert und Datum
+  // des nächstliegenden Tages, wie im Positionsblatt der App.
+  const euro = (n: number) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n);
+  const datum = new Intl.DateTimeFormat('de-DE', { day: 'numeric', month: 'short' });
+
+  document.querySelectorAll<HTMLElement>('[data-abtaster]').forEach((wrap) => {
+    const werte: number[] = JSON.parse(wrap.dataset.werte ?? '[]');
+    const referenz = Number(wrap.dataset.referenz ?? NaN);
+    const [bw, bh, pad] = (wrap.dataset.box ?? '420,120,2.5').split(',').map(Number);
+    const ende = new Date(wrap.dataset.ende ?? Date.now());
+    const marke = wrap.querySelector<HTMLElement>('.prices__marke');
+    const wertEl = wrap.querySelector<HTMLElement>('[data-marke-wert]');
+    const tagEl = wrap.querySelector<HTMLElement>('[data-marke-tag]');
+    const text = wrap.querySelector<HTMLElement>('.prices__marke-text');
+    if (!werte.length || !marke || !wertEl || !tagEl || !text) return;
+
+    const alle = Number.isFinite(referenz) ? [...werte, referenz] : werte;
+    const min = Math.min(...alle);
+    const max = Math.max(...alle);
+    const luft = (max - min) * 0.25 || 1;
+    const lo = min - luft;
+    const hi = max + luft;
+    const svg = wrap.querySelector('svg')!;
+
+    const zeige = (clientX: number) => {
+      const r = svg.getBoundingClientRect();
+      const anteil = Math.min(1, Math.max(0, (clientX - r.left) / r.width));
+      const i = Math.round(anteil * (werte.length - 1));
+      const x = (pad + (i / (werte.length - 1)) * (bw - pad * 2)) / bw;
+      const y = (pad + (1 - (werte[i] - lo) / (hi - lo)) * (bh - pad * 2)) / bh;
+      const tag = new Date(ende);
+      tag.setDate(ende.getDate() - (werte.length - 1 - i));
+      marke.style.setProperty('--x', `${(x * 100).toFixed(2)}%`);
+      marke.style.setProperty('--y', `${(y * 100).toFixed(2)}%`);
+      text.style.setProperty('--tx', x < 0.15 ? '0%' : x > 0.85 ? '-100%' : '-50%');
+      wertEl.textContent = euro(werte[i]);
+      tagEl.textContent = datum.format(tag);
+      marke.hidden = false;
+    };
+
+    wrap.addEventListener('pointermove', (e) => zeige(e.clientX));
+    wrap.addEventListener('pointerdown', (e) => zeige(e.clientX));
+    wrap.addEventListener('pointerleave', () => (marke.hidden = true));
+    wrap.addEventListener('pointerup', () => (marke.hidden = true));
+  });
+</script>

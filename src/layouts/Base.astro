@@ -1,0 +1,100 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import { SITE, APP_STORE_URL } from '../data/site';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Pfad der Seite, z. B. `/` oder `/datenschutz.html` */
+  path?: string;
+  /** Strukturierte Daten nur auf der Startseite */
+  withAppSchema?: boolean;
+  /** Reduzierte Navigation (rechtliche Seiten) */
+  minimal?: boolean;
+}
+
+const {
+  title,
+  description = SITE.description,
+  path = '/',
+  withAppSchema = false,
+  minimal = false,
+} = Astro.props;
+
+const canonical = new URL(path, SITE.url).href;
+const ogImage = new URL('/og.png', SITE.url).href;
+const fullTitle = path === '/' ? title : `${title} – ${SITE.name}`;
+
+const appSchema = withAppSchema
+  ? {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: SITE.name,
+      description: SITE.description,
+      applicationCategory: 'UtilitiesApplication',
+      operatingSystem: `iOS ${SITE.minIOS}`,
+      softwareVersion: SITE.version,
+      inLanguage: 'de',
+      url: SITE.url,
+      image: ogImage,
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'EUR' },
+      author: { '@type': 'Person', name: 'Thomas Kipp Alcantara' },
+      ...(APP_STORE_URL ? { installUrl: APP_STORE_URL, downloadUrl: APP_STORE_URL } : {}),
+    }
+  : null;
+---
+
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <script is:inline>
+      // Nur mit Skript werden Abschnitte erst beim Scrollen eingeblendet –
+      // ohne bleibt alles sofort sichtbar.
+      document.documentElement.classList.add('js');
+    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="robots" content="index, follow" />
+
+    <link rel="icon" href="/favicon.ico" sizes="32x32" />
+    <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={SITE.name} />
+    <meta property="og:locale" content="de_DE" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="KippScan – Karte scannen, Wert sehen. Die iPhone-App für Pokémon-Sammelkarten." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    {appSchema && <script is:inline type="application/ld+json" set:html={JSON.stringify(appSchema)} />}
+  </head>
+  <body>
+    <a class="skip-link" href="#inhalt">Zum Inhalt springen</a>
+    <Nav minimal={minimal} />
+    <main id="inhalt">
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      import '../scripts/reveal';
+      import '../scripts/licht';
+    </script>
+  </body>
+</html>

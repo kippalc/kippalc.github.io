@@ -1,0 +1,80 @@
+---
+/**
+ * Angaben nach § 5 DDG – wortgleich mit `Web/impressum.html` im App-Projekt
+ * und `Anbieterangaben.swift`. Änderungen an der Anschrift gehören an alle
+ * drei Stellen.
+ */
+import Legal from '../layouts/Legal.astro';
+import { ANBIETER } from '../data/site';
+---
+
+<Legal
+  title="Impressum"
+  description="Anbieterkennzeichnung nach § 5 DDG für die iPhone-App KippScan und diese Website."
+  path="/impressum.html"
+  untertitel="Angaben gemäß § 5 DDG für die App KippScan und diese Website"
+>
+  <h2>Anbieter</h2>
+  <address>
+    {ANBIETER.name}<br />
+    {ANBIETER.strasse}<br />
+    {ANBIETER.ort}<br />
+    {ANBIETER.land}
+  </address>
+
+  <h2>Kontakt</h2>
+  <p>
+    Telefon: <a href={ANBIETER.telefonLink}>{ANBIETER.telefon}</a><br />
+    E-Mail: <a href={`mailto:${ANBIETER.email}`}>{ANBIETER.email}</a>
+  </p>
+
+  <h2>Umsatzsteuer-Identifikationsnummer</h2>
+  <p>gemäß § 27a Umsatzsteuergesetz: {ANBIETER.umsatzsteuerId}</p>
+
+  <h2>Verbraucherstreitbeilegung</h2>
+  <p>
+    Ich bin nicht verpflichtet und nicht bereit, an einem Streitbeilegungsverfahren vor einer
+    Verbraucherschlichtungsstelle teilzunehmen (§ 36 Abs. 1 Nr. 1 VSBG).
+  </p>
+
+  <h2>Hinweis zu Werbelinks</h2>
+  <p>
+    KippScan enthält Links zu eBay, die eine Partnerkennung des eBay Partner Network tragen. Kommt darüber
+    ein Kauf zustande, erhalte ich eine Provision; für Käuferinnen und Käufer ändert sich am Preis nichts.
+    Diese Links sind in der App als Werbelinks gekennzeichnet.
+  </p>
+
+  <h2>Marken und Inhalte Dritter</h2>
+  <p>
+    KippScan ist ein inoffizielles Hilfsmittel für Sammlerinnen und Sammler und steht in keiner Verbindung
+    zu Nintendo, The Pokémon Company International, Creatures Inc. oder GAME FREAK Inc. und wird von ihnen
+    weder unterstützt noch geprüft. Pokémon sowie die Namen von Karten und Serien sind Marken ihrer
+    jeweiligen Inhaber und werden hier ausschließlich zur Bezeichnung der jeweiligen Karte verwendet. Apple,
+    iPhone, iOS und Siri sind Marken von Apple Inc., eingetragen in den USA und anderen Ländern; App Store ist
+    eine Dienstleistungsmarke von Apple Inc.
+  </p>
+
+  <h2>Haftung für Inhalte und Preisangaben</h2>
+  <p>Für eigene Inhalte dieser Seiten und der App bin ich nach den allgemeinen Gesetzen verantwortlich.</p>
+  <p>
+    Die in der App angezeigten Marktwerte stammen aus öffentlichen Quellen Dritter (insbesondere Cardmarket
+    und eBay) und sind Anhaltspunkte, keine Zusicherung: Sie bilden vergangene Verkäufe oder laufende
+    Angebote ab und sagen nichts darüber aus, was eine Karte tatsächlich erlöst. Sie stellen keine Kauf-,
+    Verkaufs- oder Anlageempfehlung dar. Für Richtigkeit, Vollständigkeit und Aktualität dieser fremden Daten
+    kann ich keine Gewähr übernehmen.
+  </p>
+
+  <h2>Haftung für Links</h2>
+  <p>
+    Die App und diese Seiten verweisen auf externe Websites, auf deren Inhalte ich keinen Einfluss habe. Für
+    diese fremden Inhalte ist stets der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren
+    keine Rechtsverstöße erkennbar; bei Bekanntwerden von Rechtsverletzungen entferne ich betroffene Links
+    umgehend.
+  </p>
+
+  <h2>Urheberrecht</h2>
+  <p>
+    Die von mir erstellten Inhalte dieser Seiten und der App unterliegen dem deutschen Urheberrecht. Rechte
+    Dritter bleiben unberührt.
+  </p>
+</Legal>

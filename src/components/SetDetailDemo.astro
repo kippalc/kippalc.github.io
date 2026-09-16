@@ -1,0 +1,448 @@
+---
+/**
+ * Die Set-Ansicht der App, zum Anfassen: Fortschritt, „Was kostet der
+ * Rest?“ und der Filter Alle / Fehlend / Meine über einem Kartenraster.
+ * Aufbau nach `SetDetailScreen.swift`; Zahlen aus derselben Testsammlung
+ * wie der Screenshot „Meine Sets“ (Stellarkrone, 100 von 142) und Preise
+ * aus der Cardmarket-Tagesliste vom 15.09.2026. Besessene Karten voll,
+ * fehlende auf 42 % Deckkraft ohne Farbe; günstige fehlende (≤ 0,50 €)
+ * tragen den Preis in Grün – der Einkaufszettel-Blick.
+ */
+import HoloCard from './HoloCard.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+  [key: string]: unknown;
+}
+const { class: className = '', ...rest } = Astro.props;
+
+type Variante = 'holo' | 'gold' | 'reverse' | 'plain';
+const karten: Array<{ nr: string; name: string; preis: number; habe: boolean; variante: Variante }> = [
+  { nr: '097', name: 'Adebom', preis: 0.02, habe: true, variante: 'plain' },
+  { nr: '098', name: 'Jirachi', preis: 0.05, habe: true, variante: 'holo' },
+  { nr: '099', name: 'Klikk', preis: 0.03, habe: true, variante: 'plain' },
+  { nr: '100', name: 'Kliklak', preis: 0.05, habe: true, variante: 'reverse' },
+  { nr: '101', name: 'Klikdiklak', preis: 0.06, habe: false, variante: 'plain' },
+  { nr: '102', name: 'Meltan', preis: 0.05, habe: false, variante: 'plain' },
+  { nr: '103', name: 'Meltan', preis: 0.04, habe: false, variante: 'plain' },
+  { nr: '104', name: 'Melmetal', preis: 0.07, habe: false, variante: 'plain' },
+  { nr: '105', name: 'Melmetal-ex', preis: 0.71, habe: false, variante: 'holo' },
+  { nr: '106', name: 'Duraludon', preis: 0.03, habe: false, variante: 'plain' },
+  { nr: '107', name: 'Briduradon', preis: 0.06, habe: false, variante: 'plain' },
+  { nr: '108', name: 'Knattox', preis: 0.02, habe: false, variante: 'plain' },
+  { nr: '109', name: 'Knattatox', preis: 0.03, habe: false, variante: 'plain' },
+  { nr: '110', name: 'Schlurm-ex', preis: 0.69, habe: false, variante: 'holo' },
+  { nr: '111', name: 'Furienblitz', preis: 0.1, habe: false, variante: 'plain' },
+  { nr: '112', name: 'Tauros', preis: 0.02, habe: false, variante: 'plain' },
+];
+const euro = (n: number) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n);
+---
+
+<div class:list={['sd', className]} {...rest} data-setdetail role="group" aria-label="Set-Ansicht Stellarkrone, Beispiel">
+  <div class="sd__top" aria-hidden="true">
+    <span class="sd__circle"><Icon name="chevron-right" size={16} stroke={2.4} /></span>
+    <b>Stellarkrone</b>
+    <span class="sd__pill">Auswählen</span>
+  </div>
+  <p class="sd__series" aria-hidden="true">Karmesin &amp; Purpur</p>
+
+  <div class="sd__bar" role="progressbar" aria-valuemin="0" aria-valuemax="142" aria-valuenow="100" aria-label="100 von 142 Karten">
+    <i data-animate style="--p: 70.4%"></i>
+  </div>
+  <div class="sd__counts num">
+    <b>100 von 142</b>
+    <span>Geheimkarten 0/33</span>
+  </div>
+
+  <div class="sd__cost">
+    <div class="sd__cost-text">
+      <small>Noch 75 Karten</small>
+      <b class="num">432,67 €</b>
+      <span class="num"><Icon name="tag" size={13} stroke={2.2} />39 Karten unter 0,50 € – zusammen 3,01 €</span>
+    </div>
+    <div class="sd__cost-btns" aria-hidden="true">
+      <span class="sd__circle"><Icon name="upload" size={15} stroke={2.2} /></span>
+      <span class="sd__circle"><Icon name="refresh" size={15} stroke={2.2} /></span>
+    </div>
+  </div>
+
+  <div class="sd__filter" role="tablist" aria-label="Filter">
+    <button type="button" role="tab" aria-selected="true" class="is-active" data-filter="alle">Alle</button>
+    <button type="button" role="tab" aria-selected="false" data-filter="fehlend">Fehlend</button>
+    <button type="button" role="tab" aria-selected="false" data-filter="meine">Meine</button>
+  </div>
+  <div class="sd__sort" aria-hidden="true"><span>#</span> Nummer <Icon name="chevron-down" size={13} stroke={2.4} /></div>
+
+  <ul class="sd__grid" data-grid>
+    {
+      karten.map((k) => (
+        <li class:list={['sd__tile', { 'is-missing': !k.habe }]} data-habe={k.habe ? '1' : '0'}>
+          <div class="sd__card">
+            <HoloCard nummer={`${k.nr}/142`} code="" variante={k.variante} sheen={false} />
+            {k.habe && (
+              <span class="sd__check">
+                <Icon name="check" size={11} stroke={3} />
+              </span>
+            )}
+            <span class:list={['sd__price', 'num', { 'is-cheap': !k.habe && k.preis <= 0.5 }]}>{euro(k.preis)}</span>
+          </div>
+          <span class="sd__nr num">{k.nr}</span>
+          <span class="sr-only">{k.name}{k.habe ? ', vorhanden' : ', fehlt'}</span>
+        </li>
+      ))
+    }
+  </ul>
+  <p class="sd__empty" data-empty hidden>Nichts zu zeigen.</p>
+</div>
+
+<style>
+  .sd {
+    display: grid;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 420px;
+    padding: 1rem 1rem 1.1rem;
+    border-radius: var(--r-bar);
+    background: var(--glass-fill);
+    position: relative;
+    isolation: isolate;
+  }
+
+  .sd::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: var(--glass-edge);
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    pointer-events: none;
+  }
+
+  .sd__top {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  .sd__top b {
+    font-weight: 600;
+  }
+
+  .sd__circle {
+    display: inline-grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  .sd__top .sd__circle svg {
+    transform: rotate(180deg);
+  }
+
+  .sd__pill {
+    padding: 0.35rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .sd__series {
+    margin-top: -0.35rem;
+    text-align: center;
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .sd__bar {
+    height: 6px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+  }
+
+  .sd__bar i {
+    display: block;
+    height: 100%;
+    width: var(--p);
+    border-radius: inherit;
+    background: var(--up);
+    box-shadow: 0 0 10px rgba(74, 222, 128, 0.5);
+    transform-origin: left;
+    transform: scaleX(1);
+    transition: transform 1.2s var(--ease-out);
+  }
+
+  :global(html.js) .sd__bar i:not(.is-in) {
+    transform: scaleX(0);
+  }
+
+  .sd__counts {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-top: -0.25rem;
+    font-size: 0.9375rem;
+  }
+
+  .sd__counts b {
+    font-weight: 700;
+  }
+
+  .sd__counts span {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+  }
+
+  .sd__cost {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.8rem 0.9rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .sd__cost-text {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .sd__cost-text small {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+  }
+
+  .sd__cost-text b {
+    font-size: 1.5rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+  }
+
+  .sd__cost-text span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-size: 0.75rem;
+    color: var(--up);
+  }
+
+  .sd__cost-btns {
+    display: flex;
+    gap: 0.4rem;
+    flex: none;
+  }
+
+  .sd__filter {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 3px;
+    padding: 3px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+  }
+
+  .sd__filter button {
+    height: 2.1rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text);
+    transition:
+      background-color 0.2s,
+      transform 0.16s var(--ease-snappy);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .sd__filter button:active {
+    transform: scale(0.97);
+  }
+
+  .sd__filter button.is-active {
+    background: rgba(255, 255, 255, 0.22);
+    font-weight: 600;
+  }
+
+  .sd__sort {
+    justify-self: end;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.8125rem;
+    font-weight: 500;
+  }
+
+  .sd__sort span {
+    color: var(--text-muted);
+  }
+
+  .sd__grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0.75rem 0.6rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .sd__tile {
+    display: grid;
+    gap: 0.3rem;
+    justify-items: center;
+    animation: tile-in 0.35s var(--ease-out) both;
+  }
+
+  @keyframes tile-in {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .sd__tile[hidden] {
+    display: none;
+  }
+
+  .sd__card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 63 / 88;
+  }
+
+  .sd__card :global(.card) {
+    border-radius: 6px;
+    transition:
+      filter 0.3s,
+      opacity 0.3s;
+  }
+
+  .sd__card :global(.card__foot) {
+    display: none;
+  }
+
+  .is-missing .sd__card :global(.card) {
+    filter: saturate(0);
+    opacity: 0.42;
+  }
+
+  .sd__check {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--up);
+    color: #0a2a14;
+    display: grid;
+    place-items: center;
+    box-shadow: 0 0 0 1.5px rgba(0, 0, 0, 0.35);
+  }
+
+  .sd__price {
+    position: absolute;
+    right: 4px;
+    bottom: 4px;
+    padding: 0.1rem 0.35rem;
+    border-radius: 5px;
+    background: rgba(0, 0, 0, 0.72);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: #fff;
+  }
+
+  .sd__price.is-cheap {
+    background: rgba(74, 222, 128, 0.85);
+    color: #062a12;
+  }
+
+  .sd__nr {
+    font-size: 0.75rem;
+    color: var(--text-soft);
+  }
+
+  .sd__empty {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    text-align: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .sd__tile {
+      animation: none;
+    }
+
+    :global(html.js) .sd__bar i:not(.is-in) {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-setdetail]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-filter]'));
+    const tiles = Array.from(root.querySelectorAll<HTMLElement>('.sd__tile'));
+    const empty = root.querySelector<HTMLElement>('[data-empty]');
+
+    const filtere = (art: string) => {
+      tabs.forEach((t) => {
+        const aktiv = t.dataset.filter === art;
+        t.classList.toggle('is-active', aktiv);
+        t.setAttribute('aria-selected', String(aktiv));
+        t.tabIndex = aktiv ? 0 : -1;
+      });
+      let sichtbar = 0;
+      tiles.forEach((tile) => {
+        const habe = tile.dataset.habe === '1';
+        const zeigen = art === 'alle' || (art === 'fehlend' && !habe) || (art === 'meine' && habe);
+        tile.hidden = !zeigen;
+        if (zeigen) {
+          sichtbar++;
+          // Animation neu anstoßen
+          tile.style.animation = 'none';
+          void tile.offsetWidth;
+          tile.style.animation = '';
+        }
+      });
+      if (empty) empty.hidden = sichtbar > 0;
+    };
+
+    tabs.forEach((t, i) => {
+      t.tabIndex = t.classList.contains('is-active') ? 0 : -1;
+      t.addEventListener('click', () => filtere(t.dataset.filter ?? 'alle'));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const next = tabs[(i + d + tabs.length) % tabs.length];
+        filtere(next.dataset.filter ?? 'alle');
+        next.focus();
+      });
+    });
+  });
+</script>

@@ -1,0 +1,1274 @@
+---
+/**
+ * Der Sucher der App, nachgebaut fürs Web – und in Bewegung.
+ *
+ * Eine Karte gleitet in den Rahmen, der Rahmen wird hell, die Nummer wird
+ * gelesen, das Ergebnisfeld federt herein. Zustände, Texte, Abstände und
+ * Farben folgen `ScannerScreen.swift`: der Rahmen spricht in Licht (gedimmt,
+ * hell, voller Schein), die Nummernmarker sitzen in beiden unteren Ecken, die
+ * Bedienleiste trägt Modus, Licht, Foto und Zustand.
+ *
+ * Die Karte ist bewusst abstrakt – eine Holo-Fläche wie im App-Symbol, keine
+ * fremde Kartenkunst. Gelesen wird, was auf jeder Karte steht: die Nummer.
+ * Name, Set und Preis stammen aus der Kartenliste und der Cardmarket-
+ * Tagesliste, die mit der App kommen (Stand 15.09.2026).
+ *
+ * Alle Maße in `cqw` – Prozent der Bildschirmbreite –, damit die Demo in
+ * jedem Telefonrahmen gleich aussieht. Ein iPhone-Punkt sind rund 0,25 cqw.
+ */
+import HoloCard from './HoloCard.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+  [key: string]: unknown;
+}
+const { class: className = '', ...rest } = Astro.props;
+---
+
+<div
+  class:list={['scan', className]}
+  {...rest}
+  data-scanner
+  role="img"
+  aria-label="Demo des Scanners: Karten gleiten nacheinander in den Sucherrahmen, die App liest die Nummer – etwa 199/165 – und zeigt Glurak-ex aus dem Set 151 mit 422,69 Euro Marktwert. Im Serienmodus landen sichere Treffer ohne Tippen in der Sammlung."
+>
+  <div class="scan__inner" aria-hidden="true">
+    <!-- Kamerabild: ein dunkler Tisch, Licht von oben -->
+    <div class="scan__cam">
+      <div class="scan__frame">
+        <div class="scan__card" data-card>
+          <HoloCard nummer="199/165" code="MEW DE" ocr />
+          <div class="scan__sweep"></div>
+        </div>
+        <div class="scan__mask"></div>
+        <div class="scan__stroke"></div>
+        <i class="scan__marker scan__marker--l"></i>
+        <i class="scan__marker scan__marker--r"></i>
+      </div>
+    </div>
+
+    <!-- Statusleiste -->
+    <div class="scan__statusbar">
+      <span class="scan__time">12:25</span>
+      <span class="scan__island"></span>
+      <span class="scan__sys">
+        <svg viewBox="0 0 20 12" class="scan__cell"><path fill="currentColor" d="M0 9h3v3H0zM5 6h3v6H5zM10 3h3v9h-3zM15 0h3v12h-3z"/></svg>
+        <svg viewBox="0 0 16 12" class="scan__wifi"><path fill="currentColor" d="M8 10.2a1.6 1.6 0 1 1 0 3.2 1.6 1.6 0 0 1 0-3.2zM8 6.4c1.6 0 3 .6 4.1 1.6l-1.3 1.3A4 4 0 0 0 8 8.2a4 4 0 0 0-2.8 1.1L3.9 8A5.8 5.8 0 0 1 8 6.4zM8 2.6c2.6 0 5 1 6.8 2.7l-1.3 1.3A7.7 7.7 0 0 0 8 4.4a7.7 7.7 0 0 0-5.5 2.2L1.2 5.3A9.6 9.6 0 0 1 8 2.6z" transform="translate(0 -2)"/></svg>
+        <svg viewBox="0 0 27 13" class="scan__batt"><rect x=".5" y=".5" width="22" height="12" rx="3.5" fill="none" stroke="currentColor" opacity=".45"/><rect x="2" y="2" width="19" height="9" rx="2.2" fill="currentColor"/><path d="M24 4.5v4a2 2 0 0 0 0-4z" fill="currentColor" opacity=".45"/></svg>
+      </span>
+    </div>
+
+    <!-- Unteres Feld -->
+    <div class="scan__panel">
+      <div class="scan__series">
+        <p class="scan__series-head">
+          <Icon name="stack" size="100%" stroke={2} />
+          <span>Serie · <b data-series-count>0</b> aufgenommen</span>
+          <b class="num up" data-series-sum hidden>0,00 €</b>
+        </p>
+        <p class="scan__series-hint" data-series-hint>Sichere Treffer landen ohne Tippen in der Sammlung. Unsichere halten an und fragen nach.</p>
+        <p class="scan__series-last num" data-series-last hidden><span data-series-last-name></span><b data-series-last-price></b></p>
+      </div>
+
+      <div class="scan__line scan__line--idle">
+        <span class="scan__line-icon scan__line-icon--empty"><Icon name="viewfinder" size="100%" stroke={2} /></span>
+        <span class="scan__line-icon scan__line-icon--found"><Icon name="check-circle" size="100%" stroke={2} /></span>
+        <span class="scan__line-icon scan__line-icon--busy"><span class="scan__spinner"></span></span>
+        <span class="scan__line-text" data-line>Karte in den Rahmen halten</span>
+      </div>
+
+      <div class="scan__result">
+        <div class="scan__head">
+          <div class="scan__thumb" data-thumb>
+            <HoloCard nummer="199/165" code="" sheen={false} />
+          </div>
+          <div class="scan__meta">
+            <div class="scan__name" data-name>Glurak-ex</div>
+            <div class="scan__set" data-set>151 · Nr. 199</div>
+            <div class="scan__price num" data-price>422,69 €</div>
+            <div class="scan__sub num" data-sub><span>Trend</span><span>⌀30 356,40 €</span><span>ab 220,00 €</span></div>
+          </div>
+        </div>
+
+        <div class="scan__bestand" data-bestand>
+          <span class="scan__bestand-icon scan__bestand-icon--fehlt"><Icon name="circle-dashed" size="100%" stroke={2} /></span>
+          <span class="scan__bestand-icon scan__bestand-icon--drin"><Icon name="check-circle" size="100%" stroke={2} /></span>
+          <span class="scan__bestand-icon scan__bestand-icon--wunsch"><Icon name="star-fill" size="100%" /></span>
+          <span data-bestand-text>Fehlt noch · 99/165 im Set</span>
+        </div>
+
+        <div class="scan__prints" data-prints hidden>
+          <span class="is-active"><small>Normal</small><b class="num" data-print-normal>0,63 €</b></span>
+          <span><small>Reverse</small><b class="num" data-print-reverse>3,87 €</b></span>
+        </div>
+
+        <div class="scan__divider"></div>
+        <div class="scan__markets">
+          <span><Icon name="search" size="100%" stroke={2.4} />Cardmarket</span>
+          <span><Icon name="search" size="100%" stroke={2.4} />eBay</span>
+          <span><Icon name="seal" size="100%" stroke={2.2} />Verkauft</span>
+        </div>
+
+        <div class="scan__add">
+          <span class="scan__add-icon scan__add-icon--plus"><Icon name="plus-circle" size="100%" stroke={2} /></span>
+          <span class="scan__add-icon scan__add-icon--check"><Icon name="check-circle" size="100%" stroke={2.4} /></span>
+          <span data-add-label>Aufnehmen</span>
+        </div>
+        <div class="scan__row2">
+          <span><Icon name="seal" size="100%" stroke={2.2} />Gegradet</span>
+          <span data-vormerken>
+            <span class="scan__vormerken-icon scan__vormerken-icon--leer"><Icon name="star" size="100%" stroke={2.2} /></span>
+            <span class="scan__vormerken-icon scan__vormerken-icon--voll"><Icon name="star-fill" size="100%" /></span>
+            <span data-vormerken-label>Vormerken</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="scan__controls">
+        <button type="button" class="scan__mode" data-mode-chip tabindex="-1">
+          <span class="scan__mode-icon scan__mode-icon--single"><Icon name="viewfinder" size="100%" stroke={2.2} /></span>
+          <span class="scan__mode-icon scan__mode-icon--series"><Icon name="stack" size="100%" stroke={2.2} /></span>
+          <b data-mode-label>Einzeln</b>
+          <Icon name="chevron-up-down" size="100%" stroke={2.4} />
+        </button>
+        <span class="scan__circle"><Icon name="bolt-slash" size="100%" stroke={2} /></span>
+        <span class="scan__circle"><Icon name="photo" size="100%" stroke={2} /></span>
+        <span class="scan__circle scan__circle--nm">NM</span>
+        <span class="scan__next">Weiter</span>
+      </div>
+    </div>
+
+    <!-- Reiter -->
+    <div class="scan__tabs">
+      <span class="is-active"><Icon name="viewfinder" size="100%" stroke={2} />Scannen</span>
+      <span><Icon name="grid" size="100%" stroke={1.9} />Sammlung</span>
+      <span><Icon name="stack" size="100%" stroke={1.9} />Sets</span>
+      <span><Icon name="info" size="100%" stroke={1.9} />Info</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  @property --g {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0;
+  }
+
+  @property --o {
+    syntax: '<number>';
+    inherits: false;
+    initial-value: 0.45;
+  }
+
+  .scan {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    container-type: inline-size;
+    background: #000;
+    overflow: hidden;
+    font-family: var(--font);
+    color: var(--text);
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  .scan__inner {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  /* --- Kamera ---------------------------------------------------------- */
+
+  .scan__cam {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(110% 70% at 50% 28%, #33343a 0%, #1d1e22 48%, #0e0e10 100%);
+  }
+
+  .scan__cam::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      repeating-linear-gradient(
+        0deg,
+        rgba(255, 255, 255, 0.012) 0 1px,
+        transparent 1px 3px
+      );
+    mix-blend-mode: screen;
+    pointer-events: none;
+  }
+
+  /* Rahmen im Kartenformat 63:88 – Position und Größe hängen am Zustand */
+  .scan__frame {
+    --fw: 74cqw;
+    --cy: 92cqw;
+    position: absolute;
+    left: 50%;
+    top: var(--cy);
+    width: var(--fw);
+    aspect-ratio: 63 / 88;
+    transform: translate(-50%, -50%);
+    transition:
+      width 0.55s var(--ease-out),
+      top 0.55s var(--ease-out);
+  }
+
+  .scan.is-treffer .scan__frame,
+  .scan.is-suche .scan__frame {
+    --fw: 50cqw;
+    --cy: 58cqw;
+  }
+
+  /* Abdunkelung: Rahmen ausgeschnitten */
+  .scan__mask {
+    position: absolute;
+    inset: 0;
+    border-radius: 3.5cqw;
+    box-shadow: 0 0 0 200cqw rgba(0, 0, 0, 0.45);
+    pointer-events: none;
+  }
+
+  .scan__stroke {
+    position: absolute;
+    inset: 0;
+    border-radius: 3.5cqw;
+    border: 0.62cqw solid rgba(255, 255, 255, var(--o, 0.45));
+    transition:
+      border-color 0.25s ease-out,
+      box-shadow 0.25s ease-out,
+      filter 0.25s;
+    box-shadow:
+      0 0 calc(var(--g, 0) * 9px) rgba(255, 255, 255, var(--g, 0)),
+      0 0 calc(var(--g, 0) * 22px) rgba(255, 255, 255, calc(var(--g, 0) * 0.5));
+  }
+
+  .scan.is-erkannt .scan__stroke {
+    --o: 0.9;
+  }
+
+  .scan.is-gelesen .scan__stroke,
+  .scan.is-suche .scan__stroke {
+    --o: 0.9;
+    animation: atmen 1.15s ease-in-out infinite alternate;
+  }
+
+  .scan.is-treffer .scan__stroke {
+    --o: 1;
+    --g: 0.55;
+  }
+
+  @keyframes atmen {
+    from {
+      --g: 0.1;
+    }
+    to {
+      --g: 0.4;
+    }
+  }
+
+  /* Wo die Sammlernummer erwartet wird: beide unteren Ecken */
+  .scan__marker {
+    position: absolute;
+    bottom: 1.5%;
+    width: 30%;
+    height: 5%;
+    border: 0.38cqw dashed rgba(255, 255, 255, 0.45);
+    border-radius: 1cqw;
+  }
+
+  .scan__marker--l {
+    left: 4%;
+  }
+
+  .scan__marker--r {
+    right: 4%;
+  }
+
+  /* --- Die Karte ------------------------------------------------------- */
+
+  .scan__card {
+    position: absolute;
+    inset: 4.5% 5.5%;
+    transform: translate(70cqw, 90cqw) rotate(14deg);
+    opacity: 0;
+    transition:
+      transform 1.15s var(--ease-out),
+      opacity 0.5s ease-out;
+  }
+
+  .scan.is-karte .scan__card {
+    transform: translate(0, 0) rotate(-1.2deg);
+    opacity: 1;
+  }
+
+  .scan.is-leaving .scan__card {
+    transform: translate(-70cqw, 40cqw) rotate(-16deg);
+    opacity: 0;
+    transition:
+      transform 0.8s cubic-bezier(0.4, 0, 0.8, 0.4),
+      opacity 0.6s ease-in;
+  }
+
+  /* Die Linie aus dem App-Symbol – einmal über die Karte, wenn gelesen wird */
+  .scan__sweep {
+    position: absolute;
+    left: -6%;
+    right: -6%;
+    top: 0;
+    height: 0.7cqw;
+    border-radius: 999px;
+    background: #4ade80;
+    box-shadow:
+      0 0 8px #4ade80,
+      0 0 26px rgba(74, 222, 128, 0.7),
+      0 0 60px rgba(74, 222, 128, 0.35);
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  .scan.is-gelesen .scan__sweep {
+    animation: sweep 0.9s var(--ease-out) forwards;
+  }
+
+  @keyframes sweep {
+    0% {
+      top: 4%;
+      opacity: 0;
+    }
+    12% {
+      opacity: 1;
+    }
+    88% {
+      opacity: 1;
+    }
+    100% {
+      top: 96%;
+      opacity: 0;
+    }
+  }
+
+  /* Haken in die Karte (eigene Komponente) */
+  .scan.is-gelesen :global(.card__ocr) {
+    opacity: 1;
+    transform: none;
+  }
+
+  .scan__thumb :global(.card) {
+    border-radius: 1.5cqw;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  /* --- Statusleiste ---------------------------------------------------- */
+
+  .scan__statusbar {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 14.5cqw;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 1.6cqw 8.5cqw 0 9.5cqw;
+    font-size: 4.1cqw;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .scan__island {
+    position: absolute;
+    top: 2.8cqw;
+    left: 50%;
+    width: 31cqw;
+    height: 9cqw;
+    border-radius: 999px;
+    background: #000;
+    transform: translateX(-50%);
+  }
+
+  .scan__sys {
+    display: flex;
+    align-items: center;
+    gap: 1.8cqw;
+  }
+
+  .scan__cell {
+    width: 4.4cqw;
+  }
+
+  .scan__wifi {
+    width: 4.2cqw;
+  }
+
+  .scan__batt {
+    width: 6.8cqw;
+  }
+
+  /* --- Unteres Feld ---------------------------------------------------- */
+
+  .scan__panel {
+    position: absolute;
+    left: 3cqw;
+    right: 3cqw;
+    bottom: 23.5cqw;
+    padding: 3.5cqw;
+    border-radius: 5.5cqw;
+    background: rgba(28, 28, 30, 0.72);
+    -webkit-backdrop-filter: blur(20px) saturate(140%);
+    backdrop-filter: blur(20px) saturate(140%);
+    box-shadow:
+      inset 0 0 0 0.3cqw rgba(255, 255, 255, 0.11),
+      inset 0 0.3cqw 0 rgba(255, 255, 255, 0.12);
+    display: grid;
+    gap: 3cqw;
+  }
+
+  .scan__line {
+    display: flex;
+    align-items: center;
+    gap: 2cqw;
+    min-height: 6cqw;
+    font-size: 3.7cqw;
+    color: var(--text-soft);
+    min-width: 0;
+  }
+
+  .scan__line-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .scan__line-icon {
+    display: none;
+    width: 5cqw;
+    height: 5cqw;
+    flex: none;
+  }
+
+  .scan__line-icon--empty {
+    display: block;
+    color: var(--text-muted);
+  }
+
+  .scan.is-erkannt .scan__line-icon--empty,
+  .scan.is-gelesen .scan__line-icon--empty,
+  .scan.is-suche .scan__line-icon--empty {
+    display: none;
+  }
+
+  .scan.is-erkannt .scan__line-icon--found,
+  .scan.is-gelesen .scan__line-icon--found {
+    display: block;
+    color: var(--text);
+  }
+
+  .scan.is-suche .scan__line-icon--busy {
+    display: block;
+  }
+
+  .scan.is-erkannt .scan__line,
+  .scan.is-gelesen .scan__line {
+    color: var(--text);
+  }
+
+  .scan__spinner {
+    display: block;
+    width: 4.2cqw;
+    height: 4.2cqw;
+    margin: 0.4cqw;
+    border-radius: 50%;
+    border: 0.6cqw solid rgba(255, 255, 255, 0.25);
+    border-top-color: #fff;
+    animation: dreh 0.8s linear infinite;
+  }
+
+  @keyframes dreh {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .scan.is-treffer .scan__line {
+    display: none;
+  }
+
+  /* Ergebnis – federt herein */
+  .scan__result {
+    display: none;
+    gap: 3cqw;
+    transform-origin: 50% 100%;
+  }
+
+  .scan.is-treffer .scan__result {
+    display: grid;
+    animation: federn 0.42s cubic-bezier(0.2, 0.9, 0.25, 1.15) both;
+  }
+
+  @keyframes federn {
+    from {
+      opacity: 0;
+      transform: scale(0.97) translateY(2cqw);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .scan__head {
+    display: flex;
+    gap: 3.5cqw;
+    align-items: flex-start;
+  }
+
+  .scan__thumb {
+    position: relative;
+    width: 18.4cqw;
+    aspect-ratio: 63 / 88;
+    flex: none;
+  }
+
+
+  .scan__meta {
+    display: grid;
+    gap: 0.6cqw;
+    min-width: 0;
+  }
+
+  .scan__name {
+    font-size: 5cqw;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    line-height: 1.15;
+  }
+
+  .scan__set {
+    font-size: 3.7cqw;
+    color: var(--text-soft);
+  }
+
+  .scan__price {
+    margin-top: 1.4cqw;
+    font-size: 7.4cqw;
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(255, 255, 255, 0.3),
+      0 0 24px rgba(255, 255, 255, 0.1);
+  }
+
+  .scan__sub {
+    display: flex;
+    gap: 2.5cqw;
+    font-size: 2.75cqw;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .scan__bestand {
+    display: flex;
+    align-items: center;
+    gap: 1.6cqw;
+    font-size: 3.1cqw;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+
+  .scan__bestand :global(svg) {
+    width: 3.8cqw;
+    height: 3.8cqw;
+  }
+
+  .scan__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .scan__markets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2cqw;
+  }
+
+  .scan__markets span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1cqw;
+    height: 8.2cqw;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 3cqw;
+    font-weight: 600;
+  }
+
+  .scan__markets :global(svg) {
+    width: 2.8cqw;
+    height: 2.8cqw;
+  }
+
+  .scan__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.6cqw;
+    height: 11cqw;
+    border-radius: 3cqw;
+    background: #fff;
+    color: #000;
+    font-size: 4.2cqw;
+    font-weight: 600;
+    box-shadow:
+      0 0 9px rgba(255, 255, 255, 0.18),
+      0 0 22px rgba(255, 255, 255, 0.08);
+  }
+
+  .scan__add :global(svg) {
+    width: 4.4cqw;
+    height: 4.4cqw;
+  }
+
+  .scan__row2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2cqw;
+  }
+
+  .scan__row2 > span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.4cqw;
+    height: 9cqw;
+    border-radius: 2.7cqw;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 3.4cqw;
+    font-weight: 500;
+  }
+
+  .scan__row2 :global(svg) {
+    width: 3.6cqw;
+    height: 3.6cqw;
+  }
+
+  /* Bedienleiste */
+  .scan__controls {
+    display: flex;
+    align-items: center;
+    gap: 2.5cqw;
+  }
+
+  .scan__mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.6cqw;
+    height: 10.5cqw;
+    padding: 0 3.2cqw 0 3cqw;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 4cqw;
+    font-weight: 600;
+  }
+
+  .scan__mode-icon :global(svg) {
+    width: 4cqw;
+    height: 4cqw;
+  }
+
+  .scan__mode > :global(svg:last-child) {
+    width: 3.2cqw;
+    height: 3.2cqw;
+    opacity: 0.7;
+  }
+
+  .scan__circle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 10.5cqw;
+    height: 10.5cqw;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.12);
+    flex: none;
+  }
+
+  .scan__circle :global(svg) {
+    width: 4.6cqw;
+    height: 4.6cqw;
+  }
+
+  .scan__circle--nm {
+    background: rgba(41, 153, 82, 0.3);
+    color: rgb(102, 224, 140);
+    font-family: var(--font-rounded);
+    font-size: 3.3cqw;
+    font-weight: 700;
+  }
+
+  .scan__next {
+    display: none;
+    margin-left: auto;
+    height: 10.5cqw;
+    padding: 0 5cqw;
+    border-radius: 999px;
+    background: #fff;
+    color: #000;
+    font-size: 3.8cqw;
+    font-weight: 600;
+    line-height: 10.5cqw;
+  }
+
+  .scan.is-treffer .scan__next {
+    display: block;
+  }
+
+  /* Steht rechts „Weiter“, weicht der Modusname dem Symbol – wie in der App */
+  .scan.is-treffer .scan__mode b {
+    display: none;
+  }
+
+
+  /* Serienleiste – nur im Serienmodus */
+  .scan__series {
+    display: none;
+    gap: 1.6cqw;
+  }
+
+  .scan.is-serie .scan__series {
+    display: grid;
+  }
+
+  .scan__series-head {
+    display: flex;
+    align-items: center;
+    gap: 2cqw;
+    font-size: 3.8cqw;
+    font-weight: 600;
+  }
+
+  .scan__series-head :global(svg) {
+    width: 4.4cqw;
+    height: 4.4cqw;
+    flex: none;
+  }
+
+  .scan__series-head b:last-child {
+    margin-left: auto;
+    font-weight: 700;
+  }
+
+  .scan__series-hint {
+    font-size: 2.9cqw;
+    line-height: 1.35;
+    color: var(--text-soft);
+  }
+
+  .scan__series-last {
+    display: flex;
+    justify-content: space-between;
+    gap: 2cqw;
+    font-size: 3.1cqw;
+    color: var(--text-soft);
+  }
+
+  .scan__series-last b {
+    font-weight: 600;
+    color: var(--text-soft);
+  }
+
+  .scan__series-last b.up {
+    color: var(--up);
+  }
+
+  [hidden] {
+    display: none !important;
+  }
+
+  /* Bestandszeile: zwei Symbole, eines sichtbar */
+  .scan__bestand-icon {
+    display: none;
+    width: 3.8cqw;
+    height: 3.8cqw;
+    flex: none;
+  }
+
+  .scan__bestand-icon--fehlt {
+    display: block;
+  }
+
+  .scan__bestand.is-drin {
+    color: var(--up);
+  }
+
+  .scan__bestand.is-drin .scan__bestand-icon--fehlt {
+    display: none;
+  }
+
+  .scan__bestand.is-drin .scan__bestand-icon--drin {
+    display: block;
+  }
+
+  .scan__bestand.is-wunsch {
+    color: var(--text);
+  }
+
+  .scan__bestand.is-wunsch .scan__bestand-icon--fehlt {
+    display: none;
+  }
+
+  .scan__bestand.is-wunsch .scan__bestand-icon--wunsch {
+    display: block;
+  }
+
+  /* Druckwahl: Normal / Reverse nebeneinander */
+  .scan__prints {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 2cqw;
+  }
+
+  .scan__prints span {
+    display: grid;
+    gap: 0.4cqw;
+    padding: 2cqw 2.8cqw;
+    border-radius: 2.5cqw;
+    background: rgba(255, 255, 255, 0.07);
+  }
+
+  .scan__prints span.is-active {
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: inset 0 0 0 0.4cqw #fff;
+  }
+
+  .scan__prints small {
+    font-size: 2.5cqw;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .scan__prints span.is-active small {
+    color: #fff;
+  }
+
+  .scan__prints b {
+    font-size: 4.7cqw;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  /* Aufnehmen: zwei Zustände */
+  .scan__add-icon {
+    display: none;
+    width: 4.4cqw;
+    height: 4.4cqw;
+  }
+
+  .scan__add-icon--plus {
+    display: block;
+  }
+
+  .scan.is-aufgenommen .scan__add {
+    background: rgba(255, 255, 255, 0.14);
+    color: var(--text);
+    box-shadow: none;
+  }
+
+  .scan.is-aufgenommen .scan__add-icon--plus {
+    display: none;
+  }
+
+  .scan.is-aufgenommen .scan__add-icon--check {
+    display: block;
+  }
+
+  .scan__vormerken-icon {
+    display: none;
+    width: 3.6cqw;
+    height: 3.6cqw;
+  }
+
+  .scan__vormerken-icon--leer {
+    display: block;
+  }
+
+  .scan__row2 > span.is-vorgemerkt .scan__vormerken-icon--leer {
+    display: none;
+  }
+
+  .scan__row2 > span.is-vorgemerkt .scan__vormerken-icon--voll {
+    display: block;
+  }
+
+  /* Liegt die Karte schon in der Sammlung, gibt es nichts vorzumerken */
+  .scan__row2:has([data-vormerken][hidden]) {
+    grid-template-columns: 1fr;
+  }
+
+  /* Im Serienmodus keine zweite Reihe – gestapelt wird kein Gehäuse */
+  .scan.is-serie .scan__row2 {
+    display: none;
+  }
+
+  /* Modus-Chip: weiß gefüllt, sobald ein anderer Modus als Einzeln läuft */
+  .scan__mode-icon {
+    display: none;
+    width: 4cqw;
+    height: 4cqw;
+  }
+
+  .scan__mode-icon--single {
+    display: block;
+  }
+
+  .scan.is-serie .scan__mode-icon--single {
+    display: none;
+  }
+
+  .scan.is-serie .scan__mode-icon--series {
+    display: block;
+  }
+
+  .scan.is-serie .scan__mode {
+    background: rgba(255, 255, 255, 0.92);
+    color: #000;
+  }
+
+  .scan__mode {
+    cursor: pointer;
+    font: inherit;
+    color: var(--text);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* --- Reiter ---------------------------------------------------------- */
+
+  .scan__tabs {
+    position: absolute;
+    left: 5cqw;
+    right: 5cqw;
+    bottom: 6cqw;
+    height: 13.5cqw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: center;
+    padding: 1.2cqw;
+    border-radius: 999px;
+    background: rgba(30, 30, 32, 0.78);
+    -webkit-backdrop-filter: blur(24px) saturate(140%);
+    backdrop-filter: blur(24px) saturate(140%);
+    box-shadow:
+      inset 0 0 0 0.3cqw rgba(255, 255, 255, 0.1),
+      0 6cqw 10cqw -6cqw rgba(0, 0, 0, 0.9);
+  }
+
+  .scan__tabs span {
+    display: grid;
+    justify-items: center;
+    gap: 0.6cqw;
+    height: 100%;
+    align-content: center;
+    border-radius: 999px;
+    font-size: 2.9cqw;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .scan__tabs span.is-active {
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .scan__tabs :global(svg) {
+    width: 5.6cqw;
+    height: 5.6cqw;
+  }
+
+  /* --- Ohne Skript: der fertige Zustand, ohne Ablauf -------------------- */
+  :global(html:not(.js)) .scan__card {
+    transform: none;
+    opacity: 1;
+  }
+
+  :global(html:not(.js)) .scan__frame {
+    --fw: 50cqw;
+    --cy: 58cqw;
+  }
+
+  :global(html:not(.js)) .scan__stroke {
+    --o: 1;
+    --g: 0.55;
+  }
+
+  :global(html:not(.js)) .scan__line {
+    display: none;
+  }
+
+  :global(html:not(.js)) .scan__result {
+    display: grid;
+  }
+
+  :global(html:not(.js)) .scan__next {
+    display: block;
+  }
+
+  :global(html:not(.js)) .scan__mode b {
+    display: none;
+  }
+
+  /* --- Reduzierte Bewegung: der fertige Zustand, ohne Ablauf ----------- */
+  @media (prefers-reduced-motion: reduce) {
+    .scan__card,
+    .scan__frame,
+    .scan__stroke {
+      transition: none;
+    }
+
+    .scan__sweep,
+    .scan.is-treffer .scan__result {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  /**
+   * Der Ablauf: leer → Karte → erkannt → gelesen → suche → treffer → Abgang,
+   * je Karte, mit drei echten Karten im Wechsel. Zwei Modi wie in der App:
+   * Einzeln (der Treffer bleibt stehen, „Aufnehmen“ wartet) und Serie
+   * (das Fließband läuft durch, sichere Treffer werden von selbst
+   * aufgenommen, die Serienleiste zählt mit). Läuft nur, solange die Demo
+   * im Bild ist.
+   */
+  type Karte = {
+    name: string;
+    set: string;
+    nummer: string;
+    code: string;
+    variante: 'holo' | 'gold' | 'plain';
+    preis: number;
+    sub: string[];
+    bestand: { text: string; art: 'fehlt' | 'wunsch' | 'drin' };
+    reverse?: number;
+  };
+
+  // Echte Karten, echte Preise (Cardmarket-Tagesliste 15.09.2026).
+  const KARTEN: Karte[] = [
+    {
+      name: 'Glurak-ex', set: '151 · Nr. 199', nummer: '199/165', code: 'MEW DE', variante: 'holo',
+      preis: 422.69, sub: ['Trend', '⌀30 356,40 €', 'ab 220,00 €'],
+      bestand: { text: 'Fehlt noch · 99/165 im Set', art: 'fehlt' },
+    },
+    {
+      name: 'Mew-ex', set: '151 · Nr. 205', nummer: '205/165', code: 'MEW DE', variante: 'gold',
+      preis: 26.93, sub: ['Trend', '⌀30 26,02 €', 'ab 15,00 €'],
+      bestand: { text: 'Auf deiner Wunschliste', art: 'wunsch' },
+    },
+    {
+      name: 'Dragoran', set: '151 · Nr. 149', nummer: '149/165', code: 'MEW DE', variante: 'plain',
+      preis: 0.63, sub: ['Trend', '⌀30 0,65 €', 'ab 0,05 €'],
+      bestand: { text: 'In der Sammlung: 2× · NM, LP', art: 'drin' }, reverse: 3.87,
+    },
+  ];
+
+  const TEXTE: Record<string, string> = {
+    leer: 'Karte in den Rahmen halten',
+    erkannt: 'Karte erkannt – Nummer unten scharf stellen',
+    gelesen: '',
+    suche: 'Suche in der Kartendatenbank …',
+  };
+
+  // [Zeit ab Rundenbeginn, Zustände]
+  const EINZELN: Array<[number, string[]]> = [
+    [0, ['leer']], [500, ['leer', 'karte']], [1900, ['erkannt', 'karte']], [2700, ['gelesen', 'karte']],
+    [3900, ['suche', 'karte']], [4500, ['treffer', 'karte']], [10300, ['treffer', 'karte', 'leaving']],
+  ];
+  const EINZELN_RUNDE = 11400;
+  const SERIE: Array<[number, string[]]> = [
+    [0, ['leer']], [300, ['leer', 'karte']], [1500, ['erkannt', 'karte']], [2200, ['gelesen', 'karte']],
+    [3200, ['suche', 'karte']], [3700, ['treffer', 'karte', 'aufgenommen']], [6900, ['treffer', 'karte', 'aufgenommen', 'leaving']],
+  ];
+  const SERIE_RUNDE = 7900;
+
+  const euro = (n: number) => new Intl.NumberFormat('de-DE', { style: 'currency', currency: 'EUR' }).format(n);
+  const reduziert = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  document.querySelectorAll<HTMLElement>('[data-scanner]').forEach((root) => {
+    const q = <T extends HTMLElement>(sel: string) => root.querySelector<T>(sel);
+    const line = q('[data-line]');
+    const alle = ['is-leer', 'is-karte', 'is-erkannt', 'is-gelesen', 'is-suche', 'is-treffer', 'is-leaving', 'is-aufgenommen'];
+
+    let modus: 'single' | 'series' = 'single';
+    let index = 0;
+    let laeuft = false;
+    let timer: number[] = [];
+    let serie: { anzahl: number; summe: number } = { anzahl: 0, summe: 0 };
+
+    const zeigeKarte = (k: Karte) => {
+      root.querySelectorAll<HTMLElement>('[data-card] .card__nr, [data-thumb] .card__nr').forEach((el) => (el.textContent = k.nummer));
+      root.querySelectorAll<HTMLElement>('[data-card] .card, [data-thumb] .card').forEach((el) => {
+        el.classList.remove('card--holo', 'card--gold', 'card--plain', 'card--reverse');
+        el.classList.add(`card--${k.variante}`);
+      });
+      q('[data-name]')!.textContent = k.name;
+      q('[data-set]')!.textContent = k.set;
+      q('[data-price]')!.textContent = euro(k.preis);
+      const sub = q('[data-sub]')!;
+      sub.replaceChildren(...k.sub.map((t) => Object.assign(document.createElement('span'), { textContent: t })));
+      const bestand = q('[data-bestand]')!;
+      bestand.classList.toggle('is-drin', k.bestand.art === 'drin');
+      bestand.classList.toggle('is-wunsch', k.bestand.art === 'wunsch');
+      q('[data-bestand-text]')!.textContent = k.bestand.text;
+      const vormerken = q('[data-vormerken]')!;
+      vormerken.hidden = k.bestand.art === 'drin';
+      vormerken.classList.toggle('is-vorgemerkt', k.bestand.art === 'wunsch');
+      q('[data-vormerken-label]')!.textContent = k.bestand.art === 'wunsch' ? 'Vorgemerkt' : 'Vormerken';
+      const prints = q('[data-prints]')!;
+      prints.hidden = !k.reverse;
+      if (k.reverse) {
+        q('[data-print-normal]')!.textContent = euro(k.preis);
+        q('[data-print-reverse]')!.textContent = euro(k.reverse);
+      }
+      if (line) line.textContent = TEXTE.leer;
+      TEXTE.gelesen = `Nummer gelesen: ${k.nummer}`;
+    };
+
+    const zeigeSerie = () => {
+      q('[data-series-count]')!.textContent = String(serie.anzahl);
+      const summe = q('[data-series-sum]')!;
+      summe.hidden = serie.anzahl === 0;
+      summe.textContent = euro(serie.summe);
+      q('[data-series-hint]')!.hidden = serie.anzahl > 0;
+      q('[data-series-last]')!.hidden = serie.anzahl === 0;
+    };
+
+    const nimmAuf = (k: Karte) => {
+      serie = { anzahl: serie.anzahl + 1, summe: serie.summe + k.preis };
+      q('[data-series-last-name]')!.textContent = k.name;
+      const preis = q('[data-series-last-price]')!;
+      preis.textContent = euro(k.preis);
+      preis.classList.toggle('up', k.preis >= 5);
+      zeigeSerie();
+    };
+
+    const setze = (zustaende: string[]) => {
+      root.classList.remove(...alle);
+      root.classList.add(...zustaende.map((z) => `is-${z}`));
+      const text = zustaende.find((z) => z in TEXTE);
+      if (line && text) line.textContent = TEXTE[text];
+      q('[data-add-label]')!.textContent = zustaende.includes('aufgenommen') ? 'Aufgenommen' : 'Aufnehmen';
+      if (zustaende.includes('aufgenommen') && !zustaende.includes('leaving')) nimmAuf(KARTEN[index]);
+    };
+
+    const markiereKarte = () => {
+      document.querySelectorAll<HTMLButtonElement>('[data-demo-card]').forEach((b) => {
+        const aktiv = Number(b.dataset.demoCard) === index;
+        b.classList.toggle('is-active', aktiv);
+        b.setAttribute('aria-pressed', String(aktiv));
+      });
+    };
+
+    const runde = () => {
+      timer.forEach(clearTimeout);
+      zeigeKarte(KARTEN[index]);
+      markiereKarte();
+      const schritte = modus === 'series' ? SERIE : EINZELN;
+      const dauer = modus === 'series' ? SERIE_RUNDE : EINZELN_RUNDE;
+      timer = schritte.map(([t, z]) => window.setTimeout(() => setze(z), t));
+      timer.push(
+        window.setTimeout(() => {
+          index = (index + 1) % KARTEN.length;
+          // Nach drei Karten beginnt eine neue Serie – sonst zählt sie ewig.
+          if (modus === 'series' && index === 0) {
+            serie = { anzahl: 0, summe: 0 };
+            zeigeSerie();
+          }
+          runde();
+        }, dauer),
+      );
+    };
+
+    const start = () => {
+      if (laeuft) return;
+      laeuft = true;
+      runde();
+    };
+
+    const stopp = () => {
+      laeuft = false;
+      timer.forEach(clearTimeout);
+      timer = [];
+    };
+
+    const setzeModus = (neu: 'single' | 'series') => {
+      if (neu === modus) return;
+      modus = neu;
+      root.classList.toggle('is-serie', modus === 'series');
+      q('[data-mode-label]')!.textContent = modus === 'series' ? 'Serie' : 'Einzeln';
+      serie = { anzahl: 0, summe: 0 };
+      zeigeSerie();
+      document.querySelectorAll<HTMLButtonElement>('[data-demo-mode]').forEach((b) => {
+        const aktiv = b.dataset.demoMode === modus;
+        b.classList.toggle('is-active', aktiv);
+        b.setAttribute('aria-pressed', String(aktiv));
+      });
+      if (reduziert) {
+        setze(modus === 'series' ? ['treffer', 'karte', 'aufgenommen'] : ['treffer', 'karte']);
+        return;
+      }
+      if (laeuft) {
+        stopp();
+        start();
+      }
+    };
+
+    document.querySelectorAll<HTMLButtonElement>('[data-demo-mode]').forEach((b) =>
+      b.addEventListener('click', () => setzeModus(b.dataset.demoMode === 'series' ? 'series' : 'single')),
+    );
+
+    // Eine Karte antippen: genau diese wird als Nächstes gescannt – sofort.
+    document.querySelectorAll<HTMLButtonElement>('[data-demo-card]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const i = Number(b.dataset.demoCard);
+        if (!Number.isInteger(i) || !KARTEN[i]) return;
+        index = i;
+        if (reduziert) {
+          zeigeKarte(KARTEN[index]);
+          markiereKarte();
+          setze(modus === 'series' ? ['treffer', 'karte', 'aufgenommen'] : ['treffer', 'karte']);
+          return;
+        }
+        stopp();
+        start();
+      }),
+    );
+    q('[data-mode-chip]')?.addEventListener('click', () => setzeModus(modus === 'series' ? 'single' : 'series'));
+
+    zeigeKarte(KARTEN[0]);
+    zeigeSerie();
+
+    if (reduziert) {
+      setze(['treffer', 'karte']);
+      return;
+    }
+
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(([e]) => (e.isIntersecting ? start() : stopp()), { threshold: 0.2 }).observe(root);
+    } else {
+      start();
+    }
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) stopp();
+      else if (root.getBoundingClientRect().top < window.innerHeight) start();
+    });
+  });
+</script>

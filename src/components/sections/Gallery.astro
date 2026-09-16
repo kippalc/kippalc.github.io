@@ -1,0 +1,554 @@
+---
+/**
+ * Ein Blick in die App – echte Bildschirme, zum Durchblättern. Vier davon
+ * sind die Store-Aufnahmen, die übrigen stammen aus derselben Fassung im
+ * Simulator. Keine Kartenkunst, auch nicht als Miniatur: Wo die App
+ * Vorschaubilder zeigt, stehen hier ihre eigenen Platzhalter (siehe README).
+ */
+import sammlung from '../../assets/screens/sammlung.png';
+import wertverlauf from '../../assets/screens/wertverlauf.png';
+import sets from '../../assets/screens/sets.png';
+import meineSets from '../../assets/screens/meine-sets.png';
+import wunschliste from '../../assets/screens/wunschliste.png';
+import illustratoren from '../../assets/screens/illustratoren.png';
+import daten from '../../assets/screens/daten.png';
+import ausserhalb from '../../assets/screens/ausserhalb.png';
+import info from '../../assets/screens/info.png';
+import { getImage } from 'astro:assets';
+import Icon from '../Icon.astro';
+import PhoneFrame from '../PhoneFrame.astro';
+
+const screens = [
+  { bild: sammlung, titel: 'Sammlung', text: 'Marktwert, Verlauf, Sofortverkauf – und jede Position mit Zustand.', alt: 'Sammlung: Marktwert 2.733,53 €, Verlaufskurve, Sofortverkauf, Liste der Positionen mit Zustand und Preis.' },
+  { bild: wertverlauf, titel: 'Wertverlauf', text: 'Die Kurve über den Monat, darunter die größten Bewegungen.', alt: 'Wertverlauf: Kurve über 30 Tage, +283,17 €, darunter die größten Bewegungen nach 7 Tagen.' },
+  { bild: sets, titel: 'Sets', text: '427 von 1.762 Karten, zwei Sets komplett – Ringe in Ampelfarben.', alt: 'Sets: 24 %, 427 von 1.762 Karten in 13 Sets, 2 komplett, darunter Mega-Entwicklung 132/132 und Erhabene Helden 217/217.' },
+  { bild: meineSets, titel: 'Meine Sets', text: 'Nur begonnene Sets – mit „42 fehlen · ≈ 5,40 €“ in jeder Zeile.', alt: 'Meine Sets: Stellarkrone 70 %, 42 fehlen, ≈ 5,40 €; Gewalten der Zeit 62 %; 151 60 %.' },
+  { bild: wunschliste, titel: 'Wunschliste', text: 'Vorgemerkte Karten, die Summe und die günstigsten Angebote.', alt: 'Wunschliste: 10 Karten, ungefähr 92,74 €, günstigste Angebote 45,11 €.' },
+  { bild: illustratoren, titel: 'Illustratoren', text: 'Sammeln nach Zeichnerin statt nach Set – 386 Namen.', alt: 'Illustratoren: Meine Illustratoren 159, Liste mit Fortschrittsringen.' },
+  { bild: daten, titel: 'Daten', text: 'CSV, PDF, Sicherung – täglich von selbst in „Dateien“.', alt: 'Daten: Tabelle exportieren, Verkäufe exportieren, Inventarliste als PDF, automatisch gesichert heute 00:04, 5,4 MB.' },
+  { bild: ausserhalb, titel: 'Außerhalb der App', text: 'Widget, Suchfeld, App-Symbol und Siri.', alt: 'Außerhalb der App: Widget, Suchfeld, App-Symbol, Siri – je mit Erklärung.' },
+  { bild: info, titel: 'Info', text: 'Preise ausblenden, Kartendaten, Sicherung – ein Bildschirm.', alt: 'Info: Preise ausblenden, Sichern und einlesen, Kartenliste 25.08.2026, Preise 15.09.2026 mit 22.595 Einträgen, Kartenbilder laden 206 MB.' },
+];
+
+// Für die Großansicht: ein Bild je Screen in Bildschirmhöhe, erst geladen, wenn es aufgeht
+const gross = await Promise.all(
+  screens.map((s) => getImage({ src: s.bild, width: 860, format: 'webp', quality: 80 })),
+);
+---
+
+<section class="gallery section" id="screens">
+  <div class="container">
+    <div class="section-head section-head--center reveal">
+      <h2 class="h2">Ein Blick in die App.</h2>
+      <p class="lead">Echte Bildschirme, echte Zahlen – so sieht KippScan auf dem iPhone aus.</p>
+    </div>
+  </div>
+
+  <div class="gallery__wrap reveal">
+    <section class="gallery__track" data-gallery tabindex="0" aria-label="Bildschirme der App – seitlich scrollbar">
+      {
+        screens.map((s, i) => (
+          <figure class="gallery__item">
+            <div class="gallery__shot">
+              <PhoneFrame screen={s.bild} alt={s.alt} class="gallery__phone" sizes="260px" loading="lazy" />
+              <button
+                type="button"
+                class="gallery__open"
+                data-gal-open={i}
+                data-gal-src={gross[i].src}
+                data-gal-title={s.titel}
+                data-gal-text={s.text}
+                data-gal-alt={s.alt}
+                aria-label={`${s.titel} groß ansehen`}
+              >
+                <span class="gallery__open-chip" aria-hidden="true"><Icon name="expand" size={14} stroke={2.4} />Groß ansehen</span>
+              </button>
+            </div>
+            <figcaption>
+              <b>{s.titel}</b>
+              <span>{s.text}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </section>
+    <button class="gallery__btn gallery__btn--prev" type="button" aria-label="Vorherige Bildschirme" data-gallery-prev>
+      <Icon name="chevron-right" size={20} stroke={2.2} />
+    </button>
+    <button class="gallery__btn gallery__btn--next" type="button" aria-label="Weitere Bildschirme" data-gallery-next>
+      <Icon name="chevron-right" size={20} stroke={2.2} />
+    </button>
+  </div>
+
+  <!-- Großansicht: ein Bildschirm in voller Höhe, mit Pfeilen zum Nächsten -->
+  <dialog class="gallery__dialog" data-gal-dialog aria-label="Bildschirm in groß">
+    <div class="gallery__dialog-inner">
+      <figure class="gallery__dialog-fig" tabindex="-1" data-gal-fig>
+        <img data-gal-img src={gross[0].src} alt={screens[0].alt} width="860" height="1869" loading="lazy" decoding="async" />
+        <figcaption><b data-gal-cap-title></b><span data-gal-cap-text></span><small data-gal-cap-nr></small></figcaption>
+      </figure>
+      <button type="button" class="gallery__dialog-btn gallery__dialog-btn--prev" data-gal-prev aria-label="Vorheriger Bildschirm">
+        <Icon name="chevron-right" size={20} stroke={2.2} />
+      </button>
+      <button type="button" class="gallery__dialog-btn gallery__dialog-btn--next" data-gal-next aria-label="Nächster Bildschirm">
+        <Icon name="chevron-right" size={20} stroke={2.2} />
+      </button>
+      <button type="button" class="gallery__dialog-btn gallery__dialog-btn--close" data-gal-close aria-label="Schließen">
+        <Icon name="close" size={20} stroke={2.2} />
+      </button>
+    </div>
+  </dialog>
+</section>
+
+<style>
+  .gallery {
+    overflow: hidden;
+  }
+
+  .gallery__wrap {
+    position: relative;
+  }
+
+  .gallery__track {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1rem max(var(--gutter), calc((100vw - var(--container)) / 2)) 1.5rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-inline: max(var(--gutter), calc((100vw - var(--container)) / 2));
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+    -webkit-mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+    mask-image: linear-gradient(90deg, transparent, #000 4%, #000 96%, transparent);
+  }
+
+  .gallery__track::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__track:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: -2px;
+    border-radius: 12px;
+  }
+
+  .gallery__item {
+    flex: 0 0 auto;
+    width: 250px;
+    margin: 0;
+    scroll-snap-align: start;
+    display: grid;
+    gap: 1rem;
+  }
+
+  .gallery__phone {
+    --phone-w: 250px;
+    width: 250px;
+  }
+
+  .gallery__shot {
+    position: relative;
+  }
+
+  /* Die Großansicht liegt als Knopf über dem Gerät; der Chip sagt, was passiert */
+  .gallery__open {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    align-content: end;
+    justify-items: center;
+    padding-bottom: 1.1rem;
+    border-radius: calc(var(--phone-w) * 0.16);
+    cursor: zoom-in;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .gallery__open:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
+  }
+
+  .gallery__open-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.4rem 0.75rem;
+    border-radius: 999px;
+    background: rgba(28, 28, 30, 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text);
+    opacity: 0.85;
+    transform: translateY(0);
+    transition:
+      opacity 0.2s,
+      transform 0.2s var(--ease-out),
+      background-color 0.2s;
+  }
+
+  @media (hover: hover) {
+    .gallery__open-chip {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+
+    .gallery__open:hover .gallery__open-chip,
+    .gallery__open:focus-visible .gallery__open-chip {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  /* --- Großansicht ------------------------------------------------------- */
+
+  .gallery__dialog {
+    width: 100vw;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text);
+  }
+
+  /* Solange die Großansicht offen ist, scrollt die Seite dahinter nicht */
+  :global(body:has(.gallery__dialog[open])) {
+    overflow: hidden;
+  }
+
+  .gallery__dialog::backdrop {
+    background: rgba(6, 6, 6, 0.9);
+    -webkit-backdrop-filter: blur(18px);
+    backdrop-filter: blur(18px);
+  }
+
+  .gallery__dialog-inner {
+    position: relative;
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    padding: 2rem var(--gutter);
+  }
+
+  .gallery__dialog-fig {
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+    margin: 0;
+    max-width: 100%;
+  }
+
+  .gallery__dialog-fig:focus {
+    outline: none;
+  }
+
+  .gallery__dialog-fig img {
+    display: block;
+    width: auto;
+    height: min(calc(100dvh - 8.5rem), 820px);
+    max-width: 100%;
+    aspect-ratio: 1320 / 2868;
+    border-radius: clamp(18px, 5vh, 44px);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.14),
+      0 40px 80px -30px rgba(0, 0, 0, 0.9);
+    background: #000;
+  }
+
+  .gallery__dialog[open] .gallery__dialog-fig {
+    animation: gal-in 0.3s var(--ease-out);
+  }
+
+  @keyframes gal-in {
+    from {
+      opacity: 0;
+      transform: translateY(10px) scale(0.985);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .gallery__dialog-fig figcaption {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: baseline;
+    gap: 0.25rem 0.6rem;
+    text-align: center;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+  }
+
+  .gallery__dialog-fig b {
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .gallery__dialog-fig small {
+    font-size: 0.75rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .gallery__dialog-btn {
+    position: absolute;
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(28, 28, 30, 0.85);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.16);
+    color: var(--text);
+    transition:
+      background-color 0.2s,
+      transform 0.16s var(--ease-snappy);
+  }
+
+  .gallery__dialog-btn:hover {
+    background: rgba(50, 50, 52, 0.9);
+  }
+
+  .gallery__dialog-btn:active {
+    transform: scale(0.94);
+  }
+
+  .gallery__dialog-btn:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+  }
+
+  .gallery__dialog-btn--close {
+    top: 1rem;
+    right: var(--gutter);
+  }
+
+  .gallery__dialog-btn--prev {
+    left: var(--gutter);
+    top: calc(50% - 22px);
+  }
+
+  .gallery__dialog-btn--prev svg {
+    transform: rotate(180deg);
+  }
+
+  .gallery__dialog-btn--next {
+    right: var(--gutter);
+    top: calc(50% - 22px);
+  }
+
+  /* Auf dem Telefon: Bild oben, darunter Text, dann die drei Knöpfe in einer Reihe – nichts verdeckt etwas */
+  @media (max-width: 640px) {
+    .gallery__dialog-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+      gap: 0.75rem;
+      padding: 1rem var(--gutter) 1.25rem;
+    }
+
+    .gallery__dialog-fig {
+      flex: 0 0 100%;
+      gap: 0.7rem;
+    }
+
+    .gallery__dialog-fig img {
+      height: min(calc(100dvh - 12.5rem), 640px);
+    }
+
+    .gallery__dialog-btn {
+      position: static;
+    }
+
+    .gallery__dialog-btn--close {
+      margin-left: 0.75rem;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .gallery__dialog[open] .gallery__dialog-fig {
+      animation: none;
+    }
+  }
+
+  .gallery__item figcaption {
+    display: grid;
+    gap: 0.2rem;
+    padding-inline: 0.25rem;
+  }
+
+  .gallery__item b {
+    font-weight: 600;
+    font-size: 0.9375rem;
+  }
+
+  .gallery__item span {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .gallery__btn {
+    position: absolute;
+    top: calc(50% - 3rem);
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: rgba(28, 28, 30, 0.85);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    box-shadow:
+      inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 10px 30px -10px rgba(0, 0, 0, 0.8);
+    color: var(--text);
+    transition:
+      opacity 0.2s,
+      transform 0.16s var(--ease-snappy),
+      background-color 0.2s;
+  }
+
+  .gallery__btn:hover {
+    background: rgba(50, 50, 52, 0.9);
+  }
+
+  .gallery__btn:active {
+    transform: scale(0.94);
+  }
+
+  .gallery__btn[disabled] {
+    opacity: 0.25;
+    pointer-events: none;
+  }
+
+  .gallery__btn--prev {
+    left: max(0.5rem, calc((100vw - var(--container)) / 2 - 22px));
+  }
+
+  .gallery__btn--prev svg {
+    transform: rotate(180deg);
+  }
+
+  .gallery__btn--next {
+    right: max(0.5rem, calc((100vw - var(--container)) / 2 - 22px));
+  }
+
+  @media (hover: none) {
+    .gallery__btn {
+      display: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .gallery__track {
+      gap: 1rem;
+    }
+
+    .gallery__item,
+    .gallery__phone {
+      width: 220px;
+      --phone-w: 220px;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((track) => {
+    const wrap = track.parentElement!;
+    const prev = wrap.querySelector<HTMLButtonElement>('[data-gallery-prev]');
+    const next = wrap.querySelector<HTMLButtonElement>('[data-gallery-next]');
+    const schritt = () => {
+      const item = track.querySelector<HTMLElement>('.gallery__item');
+      return item ? item.offsetWidth + 24 : 300;
+    };
+    const aktualisieren = () => {
+      if (prev) prev.disabled = track.scrollLeft <= 2;
+      if (next) next.disabled = track.scrollLeft + track.clientWidth >= track.scrollWidth - 2;
+    };
+    prev?.addEventListener('click', () => track.scrollBy({ left: -schritt() * 2, behavior: 'smooth' }));
+    next?.addEventListener('click', () => track.scrollBy({ left: schritt() * 2, behavior: 'smooth' }));
+    track.addEventListener('scroll', aktualisieren, { passive: true });
+    window.addEventListener('resize', aktualisieren);
+    aktualisieren();
+  });
+
+  // Großansicht: natives <dialog>, Pfeile und Tasten blättern, Escape und
+  // ein Tipp neben das Bild schließen. Das große Bild lädt erst hier.
+  document.querySelectorAll<HTMLElement>('.gallery').forEach((gallery) => {
+    const dialog = gallery.querySelector<HTMLDialogElement>('[data-gal-dialog]');
+    const knoepfe = Array.from(gallery.querySelectorAll<HTMLButtonElement>('[data-gal-open]'));
+    if (!dialog || knoepfe.length === 0 || typeof dialog.showModal !== 'function') return;
+
+    const img = dialog.querySelector<HTMLImageElement>('[data-gal-img]')!;
+    const titel = dialog.querySelector<HTMLElement>('[data-gal-cap-title]')!;
+    const text = dialog.querySelector<HTMLElement>('[data-gal-cap-text]')!;
+    const nr = dialog.querySelector<HTMLElement>('[data-gal-cap-nr]')!;
+    let aktuell = 0;
+    let zurueck: HTMLElement | null = null;
+
+    const zeige = (i: number) => {
+      aktuell = (i + knoepfe.length) % knoepfe.length;
+      const k = knoepfe[aktuell];
+      img.src = k.dataset.galSrc ?? '';
+      img.alt = k.dataset.galAlt ?? '';
+      titel.textContent = k.dataset.galTitle ?? '';
+      text.textContent = k.dataset.galText ?? '';
+      nr.textContent = `${aktuell + 1} / ${knoepfe.length}`;
+      // Das nächste Bild schon holen – der Pfeil soll nicht warten
+      const naechster = knoepfe[(aktuell + 1) % knoepfe.length];
+      if (naechster.dataset.galSrc) new Image().src = naechster.dataset.galSrc;
+    };
+
+    knoepfe.forEach((k, i) => {
+      k.addEventListener('click', () => {
+        zurueck = k;
+        zeige(i);
+        dialog.showModal();
+        // Den Fokus aufs Bild statt auf den ersten Knopf – kein Ring beim Antippen
+        dialog.querySelector<HTMLElement>('[data-gal-fig]')?.focus({ preventScroll: true });
+      });
+    });
+
+    dialog.querySelector('[data-gal-prev]')?.addEventListener('click', () => zeige(aktuell - 1));
+    dialog.querySelector('[data-gal-next]')?.addEventListener('click', () => zeige(aktuell + 1));
+    dialog.querySelector('[data-gal-close]')?.addEventListener('click', () => dialog.close());
+
+    dialog.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') zeige(aktuell + 1);
+      else if (e.key === 'ArrowLeft') zeige(aktuell - 1);
+      else return;
+      e.preventDefault();
+    });
+
+    // Klick auf den Hintergrund (nicht aufs Bild oder einen Knopf) schließt
+    dialog.addEventListener('click', (e) => {
+      const ziel = e.target as HTMLElement;
+      if (ziel === dialog || ziel.classList.contains('gallery__dialog-inner')) dialog.close();
+    });
+
+    dialog.addEventListener('close', () => zurueck?.focus());
+
+    // Wischen auf dem Telefon blättert
+    let startX: number | null = null;
+    dialog.addEventListener('pointerdown', (e) => (startX = e.clientX), { passive: true });
+    dialog.addEventListener(
+      'pointerup',
+      (e) => {
+        if (startX === null) return;
+        const dx = e.clientX - startX;
+        startX = null;
+        if (Math.abs(dx) > 48) zeige(aktuell + (dx < 0 ? 1 : -1));
+      },
+      { passive: true },
+    );
+  });
+</script>

@@ -1,0 +1,132 @@
+---
+/**
+ * Ein iPhone-Rahmen um einen Bildschirm.
+ *
+ * Entweder mit `screen` (ein echter Screenshot aus der App, 1320 × 2868 –
+ * die Statusleiste samt Dynamic Island ist Teil des Bildes) oder mit einem
+ * Slot für nachgebaute Oberflächen (Scanner-Demo). Die Breite bestimmt der
+ * Elternteil; Radien und Rand skalieren über `--phone-w` mit.
+ */
+import { Picture } from 'astro:assets';
+
+interface Props {
+  screen?: ImageMetadata;
+  alt?: string;
+  /** Bildschirmbreite in CSS-Pixeln, für die passende Bildgröße. */
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  class?: string;
+  /** Leichter Schein hinter dem Gerät. */
+  glow?: boolean;
+  [key: string]: unknown;
+}
+
+const {
+  screen,
+  alt = '',
+  sizes = '(max-width: 640px) 78vw, 380px',
+  loading = 'lazy',
+  class: className = '',
+  glow = false,
+  ...rest
+} = Astro.props;
+---
+
+<div class:list={['phone', className, { 'phone--glow': glow }]} {...rest}>
+  <div class="phone__body">
+    <div class="phone__screen">
+      {
+        screen ? (
+          <Picture
+            src={screen}
+            alt={alt}
+            widths={[320, 480, 640, 860, 1100]}
+            sizes={sizes}
+            formats={['avif', 'webp']}
+            fallbackFormat="jpg"
+            quality={78}
+            loading={loading}
+            decoding="async"
+          />
+        ) : (
+          <slot />
+        )
+      }
+    </div>
+  </div>
+</div>
+
+<style>
+  .phone {
+    --phone-w: 380px;
+    position: relative;
+    width: 100%;
+    max-width: var(--phone-w);
+    container-type: inline-size;
+  }
+
+  .phone--glow::before {
+    content: '';
+    position: absolute;
+    inset: 8% -18% -6% -18%;
+    background: radial-gradient(50% 45% at 50% 40%, rgba(255, 255, 255, 0.09), transparent 70%);
+    filter: blur(20px);
+    z-index: -1;
+    pointer-events: none;
+  }
+
+  .phone__body {
+    position: relative;
+    padding: 2.9cqw;
+    border-radius: 13.6cqw;
+    background: linear-gradient(160deg, #262626, #0e0e0e 45%, #1b1b1b);
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 0 0 2.5px #060606,
+      0 30px 60px -20px rgba(0, 0, 0, 0.8),
+      0 60px 120px -30px rgba(0, 0, 0, 0.7);
+  }
+
+  /* Tasten – Lautstärke links, Seitentaste rechts */
+  .phone__body::before,
+  .phone__body::after {
+    content: '';
+    position: absolute;
+    width: 0.8cqw;
+    border-radius: 1cqw;
+    background: #2a2a2a;
+    box-shadow: 0 0 0 0.5px rgba(255, 255, 255, 0.12);
+  }
+
+  .phone__body::before {
+    left: -1.3cqw;
+    top: 22%;
+    height: 14%;
+    background:
+      linear-gradient(#0a0a0a, #0a0a0a) 0 40% / 100% 6% no-repeat,
+      #2a2a2a;
+  }
+
+  .phone__body::after {
+    right: -1.3cqw;
+    top: 26%;
+    height: 10%;
+  }
+
+  .phone__screen {
+    position: relative;
+    aspect-ratio: 1320 / 2868;
+    border-radius: 10.9cqw;
+    overflow: hidden;
+    background: #0a0a0a;
+    box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.06) inset;
+    -webkit-mask-image: -webkit-radial-gradient(#000, #000);
+  }
+
+  .phone__screen :global(picture),
+  .phone__screen :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+</style>

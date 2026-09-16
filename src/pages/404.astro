@@ -1,0 +1,34 @@
+---
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+---
+
+<Base title="Seite nicht gefunden" description="Diese Seite gibt es nicht." path="/404.html" minimal>
+  <section class="nf">
+    <div class="container nf__inner">
+      <p class="eyebrow">404</p>
+      <h1 class="h2">Nicht erkannt.</h1>
+      <p class="lead">Auf diese Adresse passt keine Seite. Zurück zur Startseite – dort steht alles.</p>
+      <a class="btn btn--primary" href="/">
+        Zur Startseite
+        <Icon name="arrow-right" size={18} />
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: calc(100dvh - var(--nav-h) - 22rem);
+    display: grid;
+    place-items: center;
+    padding-block: clamp(4rem, 10vw, 8rem);
+  }
+
+  .nf__inner {
+    display: grid;
+    gap: 1.25rem;
+    justify-items: start;
+    max-width: 36rem;
+  }
+</style>

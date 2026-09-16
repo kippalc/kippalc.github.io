@@ -1,0 +1,128 @@
+---
+/**
+ * Der Fortschrittsring der Sets – Prozentzahl in der Mitte, Farbe aus der
+ * Ampelskala der App. Zeichnet sich, sobald er im Bild ist (`data-animate`).
+ */
+import { fortschrittFarbe } from '../data/farben';
+
+interface Props {
+  /** 0 … 1 */
+  anteil: number;
+  size?: number;
+  stroke?: number;
+  /** Häkchen statt Zahl, wenn komplett */
+  complete?: boolean;
+  class?: string;
+  /** Verzögerung der Zeichnung in ms */
+  delay?: number;
+  [key: string]: unknown;
+}
+
+const { anteil, size = 64, stroke = 5, complete = anteil >= 1, class: className = '', delay = 0, ...rest } = Astro.props;
+const r = (size - stroke) / 2;
+const umfang = 2 * Math.PI * r;
+const farbe = fortschrittFarbe(anteil);
+const prozent = Math.round(anteil * 100);
+---
+
+<span
+  class:list={['ring', className, { 'ring--complete': complete }]}
+  {...rest}
+  style={`--size:${size}px;--stroke:${stroke}px;--c:${farbe};--umfang:${umfang.toFixed(2)};--ziel:${(umfang * (1 - Math.min(anteil, 1))).toFixed(2)};--delay:${delay}ms`}
+  data-animate
+  role="img"
+  aria-label={complete ? 'Komplett' : `${prozent} Prozent`}
+>
+  <svg viewBox={`0 0 ${size} ${size}`} width={size} height={size} aria-hidden="true">
+    <circle class="ring__track" cx={size / 2} cy={size / 2} r={r} />
+    <circle class="ring__bar" cx={size / 2} cy={size / 2} r={r} />
+  </svg>
+  <span class="ring__label num">
+    {
+      complete ? (
+        <svg viewBox="0 0 24 24" width="55%" height="55%" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="m5.5 12.5 4 4 9-9.5" />
+        </svg>
+      ) : (
+        <>
+          {prozent}
+          <small>%</small>
+        </>
+      )
+    }
+  </span>
+</span>
+
+<style>
+  .ring {
+    position: relative;
+    display: inline-grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    flex: none;
+    color: var(--c);
+  }
+
+  .ring svg {
+    position: absolute;
+    inset: 0;
+    transform: rotate(-90deg);
+    overflow: visible;
+  }
+
+  .ring__track {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.09);
+    stroke-width: var(--stroke);
+  }
+
+  .ring__bar {
+    fill: none;
+    stroke: var(--c);
+    stroke-width: var(--stroke);
+    stroke-linecap: round;
+    stroke-dasharray: var(--umfang);
+    stroke-dashoffset: var(--ziel);
+    filter: drop-shadow(0 0 6px color-mix(in srgb, var(--c) 55%, transparent));
+    transition: stroke-dashoffset 1.3s var(--ease-out);
+    transition-delay: var(--delay);
+  }
+
+  /* Mit Skript startet der Ring leer und zeichnet sich beim Einblenden */
+  :global(html.js) .ring:not(.is-in) .ring__bar {
+    stroke-dashoffset: var(--umfang);
+  }
+
+  .ring__label {
+    position: relative;
+    font-size: calc(var(--size) * 0.3);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+  }
+
+  .ring__label small {
+    font-size: 0.55em;
+    font-weight: 600;
+    color: var(--text-soft);
+    margin-left: 0.05em;
+  }
+
+  .ring--complete .ring__label {
+    color: var(--c);
+    display: grid;
+    place-items: center;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ring__bar,
+    :global(html.js) .ring:not(.is-in) .ring__bar {
+      transition: none;
+      stroke-dashoffset: var(--ziel);
+    }
+  }
+</style>

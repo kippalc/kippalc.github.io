@@ -1,0 +1,412 @@
+---
+/**
+ * Das Widget in seinen Familien, umschaltbar: klein und mittel auf dem
+ * Home-Screen, rechteckig, rund und als Zeile auf dem Sperrbildschirm.
+ * Aufbau nach `KippScanWidget.swift`; die Zahlen sind das Beispiel, das
+ * die App selbst in der Widget-Galerie zeigt (`Schnappschuss.beispiel`):
+ * 1.240,00 €, +12,00 € heute, 1.385 Karten, 695 Positionen, 14 Tage.
+ *
+ * Mit „Preise ausblenden“ (`ohnePreise` im Widget-Code) zeigt jedes Widget
+ * nur Karten und Positionen – die Elemente mit `data-preis` verschwinden,
+ * die mit `data-ohne-preis` erscheinen. Der Schalter dazu steht in der
+ * Kachel „Sammeln ohne Zahlen“ (`More.astro`).
+ */
+import Icon from './Icon.astro';
+import Sparkline from './Sparkline.astro';
+
+const verlauf = [1180, 1184, 1179, 1191, 1203, 1198, 1210, 1207, 1215, 1222, 1219, 1231, 1228, 1240];
+
+const familien = [
+  { id: 'klein', label: 'Klein' },
+  { id: 'mittel', label: 'Mittel' },
+  { id: 'sperr', label: 'Sperrbildschirm' },
+] as const;
+---
+
+<div class="wg" data-widgets>
+  <div class="wg__stage">
+    <!-- Klein -->
+    <div
+      class="widget widget--klein"
+      data-family="klein"
+      hidden
+      role="img"
+      aria-label="Kleines Home-Screen-Widget: Sammlung 1.240,00 Euro, plus 12,00 Euro heute, 1.385 Karten."
+      data-label-ohne="Kleines Home-Screen-Widget ohne Preise: Sammlung, 1.385 Karten, 695 Positionen."
+    >
+      <p class="widget__head" aria-hidden="true"><Icon name="grid" size={11} stroke={2.4} />SAMMLUNG</p>
+      <p class="widget__value num" aria-hidden="true" data-preis>1.240,00 €</p>
+      <p class="widget__delta num" aria-hidden="true" data-preis><Icon name="arrow-up-right" size={11} stroke={3} />+12,00 € <span>heute</span></p>
+      <p class="widget__foot num" aria-hidden="true" data-preis>1.385 Karten</p>
+      <p class="widget__value num" aria-hidden="true" data-ohne-preis hidden>1.385</p>
+      <p class="widget__foot widget__foot--ohne num" aria-hidden="true" data-ohne-preis hidden>Karten · 695 Positionen</p>
+    </div>
+
+    <!-- Mittel -->
+    <div
+      class="widget widget--mittel"
+      data-family="mittel"
+      role="img"
+      aria-label="Mittleres Home-Screen-Widget: Sammlung 1.240,00 Euro, plus 12,00 Euro heute, 1.385 Karten in 695 Positionen, Kurve über 14 Tage."
+      data-label-ohne="Mittleres Home-Screen-Widget ohne Preise: Sammlung, 1.385 Karten, 695 Positionen."
+    >
+      <div class="widget__left" aria-hidden="true">
+        <p class="widget__head"><Icon name="grid" size={11} stroke={2.4} />SAMMLUNG</p>
+        <p class="widget__value num" data-preis>1.240,00 €</p>
+        <p class="widget__delta num" data-preis><Icon name="arrow-up-right" size={11} stroke={3} />+12,00 € <span>heute</span></p>
+        <p class="widget__foot num" data-preis>1.385 Karten · 695 Positionen</p>
+        <p class="widget__value num" data-ohne-preis hidden>1.385</p>
+        <p class="widget__foot widget__foot--ohne num" data-ohne-preis hidden>Karten · 695 Positionen</p>
+      </div>
+      <div class="widget__right" aria-hidden="true" data-preis>
+        <Sparkline werte={verlauf} width={118} height={44} stroke={2} id="widget" fill={false} />
+        <p class="widget__days">14 Tage</p>
+      </div>
+    </div>
+
+    <!-- Sperrbildschirm -->
+    <div
+      class="lock"
+      data-family="sperr"
+      hidden
+      role="img"
+      aria-label="Sperrbildschirm-Widgets: als Zeile „Sammlung 1.240 € · +12 €“, rund mit 1.240 €, rechteckig mit Sammlung 1.240,00 € und plus 12,00 € heute."
+      data-label-ohne="Sperrbildschirm-Widgets ohne Preise: als Zeile „Sammlung · 1.385 Karten“, rund mit 1.385 Karten, rechteckig mit Sammlung, 1.385 Karten, 695 Positionen."
+    >
+      <p class="lock__inline num" aria-hidden="true"><Icon name="grid" size={12} stroke={2.4} /><span data-preis>Sammlung 1.240 € · +12 €</span><span data-ohne-preis hidden>Sammlung · 1.385 Karten</span></p>
+      <p class="lock__time num" aria-hidden="true">12:25</p>
+      <div class="lock__row" aria-hidden="true">
+        <div class="lock__circle">
+          <Icon name="grid" size={12} stroke={2.4} data-preis />
+          <b class="num" data-preis>1.240 €</b>
+          <b class="num lock__count" data-ohne-preis hidden>1.385</b>
+          <small data-ohne-preis hidden>Karten</small>
+        </div>
+        <div class="lock__rect">
+          <small>Sammlung</small>
+          <b class="num" data-preis>1.240,00 €</b>
+          <span class="num" data-preis>+12,00 € heute</span>
+          <b class="num lock__rect-count" data-ohne-preis hidden>1.385 Karten</b>
+          <span class="num" data-ohne-preis hidden>695 Positionen</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="wg__tabs" role="tablist" aria-label="Widget-Größe">
+    {
+      familien.map((f) => (
+        <button
+          type="button"
+          role="tab"
+          aria-selected={f.id === 'mittel' ? 'true' : 'false'}
+          class:list={{ 'is-active': f.id === 'mittel' }}
+          data-family-tab={f.id}
+        >
+          {f.label}
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .wg {
+    display: grid;
+    justify-items: center;
+    gap: 0.9rem;
+    width: 100%;
+  }
+
+  .wg__stage {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    min-height: 170px;
+  }
+
+  .wg__stage > [hidden] {
+    display: none;
+  }
+
+  .wg__tabs {
+    display: inline-grid;
+    grid-auto-flow: column;
+    gap: 0.2rem;
+    padding: 0.2rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .wg__tabs button {
+    height: 2rem;
+    padding: 0 0.85rem;
+    border-radius: 999px;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    transition:
+      background-color 0.2s,
+      color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .wg__tabs button.is-active {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  /* --- Home-Screen ------------------------------------------------------ */
+
+  .widget {
+    display: flex;
+    gap: 14px;
+    padding: 16px;
+    border-radius: 24px;
+    background: #000;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.12),
+      0 24px 50px -20px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    font-family: var(--font);
+    animation: widget-in 0.35s var(--ease-out);
+  }
+
+  @keyframes widget-in {
+    from {
+      opacity: 0;
+      transform: scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  .widget--mittel {
+    width: 100%;
+    max-width: 338px;
+    aspect-ratio: 338 / 158;
+  }
+
+  .widget--klein {
+    flex-direction: column;
+    gap: 0;
+    width: 158px;
+    height: 158px;
+  }
+
+  .widget__left {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .widget__head {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: rgba(255, 255, 255, 0.55);
+  }
+
+  .widget__value {
+    margin-top: auto;
+    font-size: 28px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .widget--klein .widget__value {
+    font-size: 26px;
+  }
+
+  .widget__delta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--up);
+  }
+
+  .widget__delta span {
+    font-weight: 400;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .widget__foot {
+    margin-top: auto;
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    white-space: nowrap;
+  }
+
+  /* Ohne Preise: die Zahl ist die Stückzahl, darunter Karten und Positionen, dann Luft */
+  .widget__foot--ohne {
+    margin-top: 4px;
+    margin-bottom: auto;
+  }
+
+  /* … und im mittleren Widget sitzt der Block ohne Kurve in der Mitte, wie in SwiftUI ohne Rahmen */
+  :global(.is-ohne-preise) .widget--mittel .widget__left {
+    flex: 0 0 auto;
+    margin-inline: auto;
+  }
+
+  .widget__right {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;
+    gap: 4px;
+    width: 118px;
+    flex: none;
+  }
+
+  .widget__days {
+    font-size: 10px;
+    color: rgba(255, 255, 255, 0.4);
+  }
+
+  /* --- Sperrbildschirm --------------------------------------------------- */
+
+  .lock {
+    display: grid;
+    justify-items: center;
+    gap: 6px;
+    width: 100%;
+    max-width: 338px;
+    padding: 18px 16px 16px;
+    border-radius: 24px;
+    background:
+      radial-gradient(120% 80% at 30% 0%, rgba(88, 58, 156, 0.35), transparent 60%),
+      radial-gradient(90% 70% at 80% 100%, rgba(31, 106, 99, 0.3), transparent 60%),
+      #0c0c0f;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.1),
+      0 24px 50px -20px rgba(0, 0, 0, 0.8);
+    color: #fff;
+    animation: widget-in 0.35s var(--ease-out);
+  }
+
+  .lock__inline {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .lock__time {
+    font-size: 58px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.02em;
+    margin: 2px 0 6px;
+  }
+
+  .lock__row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .lock__circle {
+    display: grid;
+    place-items: center;
+    gap: 1px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.14);
+    color: #fff;
+  }
+
+  .lock__circle b {
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .lock__circle .lock__count {
+    font-size: 15px;
+    line-height: 1;
+  }
+
+  .lock__circle small {
+    font-size: 9px;
+    line-height: 1;
+  }
+
+  .lock__rect {
+    display: grid;
+    gap: 1px;
+    min-width: 150px;
+    padding: 8px 12px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.14);
+  }
+
+  .lock__rect small {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  .lock__rect b {
+    font-size: 20px;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .lock__rect .lock__rect-count {
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .lock__rect span {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .widget,
+    .lock {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-widgets]').forEach((root) => {
+    const tabs = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-family-tab]'));
+    const stages = Array.from(root.querySelectorAll<HTMLElement>('[data-family]'));
+    const zeige = (id: string) => {
+      tabs.forEach((t) => {
+        const aktiv = t.dataset.familyTab === id;
+        t.classList.toggle('is-active', aktiv);
+        t.setAttribute('aria-selected', String(aktiv));
+        t.tabIndex = aktiv ? 0 : -1;
+      });
+      stages.forEach((s) => (s.hidden = s.dataset.family !== id));
+    };
+    tabs.forEach((t, i) => {
+      t.tabIndex = t.classList.contains('is-active') ? 0 : -1;
+      t.addEventListener('click', () => zeige(t.dataset.familyTab ?? 'mittel'));
+      t.addEventListener('keydown', (e) => {
+        const d = e.key === 'ArrowRight' ? 1 : e.key === 'ArrowLeft' ? -1 : 0;
+        if (!d) return;
+        e.preventDefault();
+        const next = tabs[(i + d + tabs.length) % tabs.length];
+        zeige(next.dataset.familyTab ?? 'mittel');
+        next.focus();
+      });
+    });
+  });
+</script>

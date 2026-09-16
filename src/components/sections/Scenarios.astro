@@ -1,0 +1,153 @@
+---
+/**
+ * Für wen – vier Situationen, in denen die App gebaut wurde, und was sie
+ * dort tut. Jede Zeile führt auf eine Funktion, die es gibt.
+ */
+import Icon from '../Icon.astro';
+
+const situationen = [
+  {
+    icon: 'tag',
+    titel: 'Am Stand des Händlers',
+    text: 'Karte vor die Kamera: Preis, „In der Sammlung: 2×“ oder „Fehlt noch“ – in Sekunden. Die Wunschliste liegt einen langen Druck auf dem App-Symbol entfernt.',
+    features: ['Scanner', 'Bestandszeile', 'Schnellaktionen'],
+  },
+  {
+    icon: 'stack',
+    titel: 'Beim Sortieren am Sonntag',
+    text: 'Serienmodus an, Zustand und Kaufpreis einmal für den Stapel setzen, Karte für Karte durchziehen. Sichere Treffer landen von selbst in der Sammlung, unsichere fragen nach.',
+    features: ['Serienmodus', 'Stapel-Kaufpreis', 'Zu prüfen'],
+  },
+  {
+    icon: 'upload',
+    titel: 'In der Tauschgruppe',
+    text: 'Tauschliste mit allem, was doppelt ist. Fehlliste je Set. Beides als Text – kopieren, einfügen, fertig. Und was andere gerade zahlen, steht bei jeder Karte einen Tipp entfernt.',
+    features: ['Tauschliste', 'Fehlliste', 'Marktplatz-Links'],
+  },
+  {
+    icon: 'chart',
+    titel: 'Mit Blick auf den Wert',
+    text: 'Der Verlauf über die ganze Sammlung, die größten Bewegungen der Woche, das Widget auf dem Home-Screen, das Verkaufsbuch mit realisiertem Gewinn. Oder alle Preise aus – wenn du wegen der Karten sammelst.',
+    features: ['Wertverlauf', 'Widget', 'Verkaufsbuch', 'Preise ausblenden'],
+  },
+] as const;
+---
+
+<section class="szen section" id="situationen">
+  <div class="container">
+    <div class="section-head reveal">
+      <h2 class="h2">Gebaut für Situationen, die Sammler kennen.</h2>
+      <p class="lead">
+        Kein Shop, kein Social, keine Werbebanner. Zwei Reiter zum Scannen und Sammeln, einer für Sets, einer
+        für Info – und alles Weitere ein Blatt, kein Menüpunkt.
+      </p>
+    </div>
+
+    <ol class="szen__list">
+      {
+        situationen.map((s, i) => (
+          <li class="szen__item reveal" style={`--delay:${i * 0.06}s`}>
+            <span class="szen__index num">0{i + 1}</span>
+            <div class="szen__body">
+              <h3>{s.titel}</h3>
+              <p>{s.text}</p>
+              <ul class="szen__tags">
+                {s.features.map((f) => (
+                  <li>{f}</li>
+                ))}
+              </ul>
+            </div>
+            <span class="szen__icon">
+              <Icon name={s.icon} size={22} />
+            </span>
+          </li>
+        ))
+      }
+    </ol>
+  </div>
+</section>
+
+<style>
+  .szen__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .szen__item {
+    display: grid;
+    grid-template-columns: 4rem minmax(0, 1fr) auto;
+    gap: 1.5rem;
+    align-items: start;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .szen__index {
+    font-size: 0.9375rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    padding-top: 0.35rem;
+  }
+
+  .szen__body {
+    display: grid;
+    gap: 0.6rem;
+    max-width: 44rem;
+  }
+
+  .szen__body h3 {
+    font-size: clamp(1.25rem, 2vw, 1.5rem);
+    font-weight: 650;
+    letter-spacing: -0.02em;
+  }
+
+  .szen__body p {
+    font-size: 1rem;
+    color: var(--text-soft);
+    text-wrap: pretty;
+  }
+
+  .szen__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    margin: 0.35rem 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .szen__tags li {
+    padding: 0.2rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+
+  .szen__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 14px;
+    background: var(--chip-fill);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    color: var(--text);
+  }
+
+  @media (max-width: 640px) {
+    .szen__item {
+      grid-template-columns: 2.5rem minmax(0, 1fr);
+      gap: 1rem;
+      padding: 1.5rem 0;
+    }
+
+    .szen__icon {
+      display: none;
+    }
+  }
+</style>

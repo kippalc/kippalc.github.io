@@ -1,0 +1,101 @@
+---
+import { Image } from 'astro:assets';
+import icon from '../../assets/icon-1024.png';
+import AppStoreButton from '../AppStoreButton.astro';
+import Icon from '../Icon.astro';
+import { ANBIETER, APP_STORE_URL, SITE } from '../../data/site';
+---
+
+<section class="dl section" id="download">
+  <div class="container">
+    <div class="dl__card glass reveal">
+      <div class="dl__glow" aria-hidden="true"></div>
+      <Image src={icon} alt="" width={256} height={256} class="dl__icon" />
+      <h2 class="h2">{SITE.name} für iPhone.</h2>
+      <p class="lead">
+        Karte scannen, Zustand wählen, Wert sehen. Für iPhone, ab iOS {SITE.minIOS}. Gratis, ohne Abo und
+        ohne Werbebanner.
+      </p>
+      <div class="dl__cta">
+        <AppStoreButton size="lg" />
+      </div>
+      <p class="dl__note">
+        {
+          APP_STORE_URL
+            ? 'Kein Konto nötig – Installieren und scannen.'
+            : 'Die App wird gerade für den App Store vorbereitet. Fragen vorab beantworte ich gern per E-Mail.'
+        }
+      </p>
+      <a class="dl__mail" href={`mailto:${ANBIETER.email}`}>
+        <Icon name="mail" size={16} />
+        {ANBIETER.email}
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dl {
+    padding-top: 0;
+  }
+
+  .dl__card {
+    position: relative;
+    display: grid;
+    justify-items: center;
+    text-align: center;
+    gap: 1.25rem;
+    padding: clamp(3rem, 7vw, 5.5rem) var(--gutter);
+    overflow: hidden;
+    border-radius: 28px;
+  }
+
+  .dl__glow {
+    position: absolute;
+    inset: -40% -20% auto -20%;
+    height: 90%;
+    background: radial-gradient(50% 60% at 50% 40%, rgba(255, 255, 255, 0.1), transparent 70%);
+    pointer-events: none;
+  }
+
+  .dl__icon {
+    position: relative;
+    width: 96px;
+    height: 96px;
+    border-radius: 22px;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.16),
+      0 30px 60px -20px rgba(0, 0, 0, 0.9),
+      0 0 60px rgba(255, 255, 255, 0.08);
+  }
+
+  .dl__card .lead {
+    text-align: center;
+    max-width: 30em;
+  }
+
+  .dl__cta {
+    margin-top: 0.5rem;
+  }
+
+  .dl__note {
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    max-width: 34em;
+    text-wrap: pretty;
+  }
+
+  .dl__mail {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.9375rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    transition: color 0.2s;
+  }
+
+  .dl__mail:hover {
+    color: var(--text);
+  }
+</style>

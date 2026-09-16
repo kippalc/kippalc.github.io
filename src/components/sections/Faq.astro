@@ -1,0 +1,140 @@
+---
+import { FAQ } from '../../data/faq';
+import Icon from '../Icon.astro';
+
+const schema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: FAQ.map((f) => ({
+    '@type': 'Question',
+    name: f.frage,
+    acceptedAnswer: { '@type': 'Answer', text: f.antwort },
+  })),
+};
+---
+
+<section class="faq section" id="faq">
+  <div class="container faq__grid">
+    <div class="faq__head reveal">
+      <h2 class="h2">Häufige Fragen.</h2>
+      <p class="lead">Und die ehrlichen Antworten – auch dort, wo die App an Grenzen stößt.</p>
+    </div>
+
+    <div class="faq__list">
+      {
+        FAQ.map((f, i) => (
+          <details class="faq__item reveal" style={`--delay:${Math.min(i, 6) * 0.04}s`} name="faq">
+            <summary>
+              <span>{f.frage}</span>
+              <Icon name="plus" size={18} stroke={2} class="faq__icon" />
+            </summary>
+            <div class="faq__answer">
+              <p>{f.antwort}</p>
+            </div>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+
+<style>
+  .faq__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+    gap: clamp(2rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .faq__head {
+    display: grid;
+    gap: 1rem;
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+
+  .faq__list {
+    display: grid;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .faq__item {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .faq__item summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1.5rem;
+    padding: 1.15rem 0.25rem;
+    cursor: pointer;
+    list-style: none;
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text);
+    transition: color 0.2s;
+    border-radius: 8px;
+  }
+
+  .faq__item summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .faq__item summary:hover {
+    color: #fff;
+  }
+
+  .faq__icon {
+    flex: none;
+    color: var(--text-muted);
+    transition:
+      transform 0.3s var(--ease-out),
+      color 0.2s;
+  }
+
+  .faq__item[open] .faq__icon {
+    transform: rotate(45deg);
+    color: var(--text);
+  }
+
+  .faq__answer {
+    padding: 0 0.25rem 1.4rem;
+    max-width: 62ch;
+  }
+
+  .faq__answer p {
+    color: var(--text-soft);
+    font-size: 0.9875rem;
+    line-height: 1.65;
+    text-wrap: pretty;
+  }
+
+  .faq__item[open] .faq__answer {
+    animation: auf 0.35s var(--ease-out);
+  }
+
+  @keyframes auf {
+    from {
+      opacity: 0;
+      transform: translateY(-6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .faq__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .faq__head {
+      position: static;
+    }
+  }
+</style>

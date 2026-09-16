@@ -1,0 +1,544 @@
+---
+import { Image } from 'astro:assets';
+import icon from '../../assets/icon-1024.png';
+import AppStoreButton from '../AppStoreButton.astro';
+import Icon from '../Icon.astro';
+import PhoneFrame from '../PhoneFrame.astro';
+import ScannerDemo from '../ScannerDemo.astro';
+import HoloCard from '../HoloCard.astro';
+import { SITE } from '../../data/site';
+---
+
+<section class="hero" id="top">
+  <div class="container hero__grid">
+    <div class="hero__copy">
+      <div class="hero__brand reveal">
+        <Image src={icon} alt="" width={128} height={128} class="hero__icon" loading="eager" />
+        <span class="hero__brandname">{SITE.name}</span>
+        <span class="hero__platform">für iPhone</span>
+      </div>
+
+      <h1 class="display reveal" style="--delay:.08s">
+        Karte scannen.<br />
+        <span class="hero__accent">Wert sehen.</span>
+      </h1>
+
+      <p class="lead reveal" style="--delay:.16s">
+        KippScan erkennt eine Pokémon-Karte an ihrer Nummer – auch in der Hülle, bei Glanz und schwachem
+        Licht –, zeigt den Cardmarket-Preis in Euro und führt deine Sammlung komplett auf dem iPhone.
+      </p>
+
+      <div class="hero__cta reveal" style="--delay:.24s">
+        <AppStoreButton size="lg" />
+        <a class="btn btn--ghost" href="#scannen">
+          So funktioniert's
+          <Icon name="chevron-down" size={18} />
+        </a>
+      </div>
+
+      <ul class="hero__facts reveal" style="--delay:.32s">
+        <li>Kostenlos</li>
+        <li>Kein Konto</li>
+        <li>Kein Tracking</li>
+        <li>iOS {SITE.minIOS}+</li>
+      </ul>
+    </div>
+
+    <div class="hero__visual reveal" style="--delay:.2s">
+      <div class="hero__stage" data-tilt>
+        <div class="hero__brackets" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div class="hero__scanline" aria-hidden="true"></div>
+        <PhoneFrame glow class="hero__phone">
+          <ScannerDemo />
+        </PhoneFrame>
+      </div>
+      <div class="hero__try">
+        <div class="hero__cards" role="group" aria-label="Karte für die Demo wählen">
+          <button type="button" class="hero__card is-active" data-demo-card="0" aria-pressed="true">
+            <span class="hero__card-thumb"><HoloCard nummer="199/165" code="" variante="holo" sheen={false} /></span>
+            <span class="hero__card-meta"><b>Glurak-ex</b><small class="num">422,69 €</small></span>
+          </button>
+          <button type="button" class="hero__card" data-demo-card="1" aria-pressed="false">
+            <span class="hero__card-thumb"><HoloCard nummer="205/165" code="" variante="gold" sheen={false} /></span>
+            <span class="hero__card-meta"><b>Mew-ex</b><small class="num">26,93 €</small></span>
+          </button>
+          <button type="button" class="hero__card" data-demo-card="2" aria-pressed="false">
+            <span class="hero__card-thumb"><HoloCard nummer="149/165" code="" variante="plain" sheen={false} /></span>
+            <span class="hero__card-meta"><b>Dragoran</b><small class="num">0,63 €</small></span>
+          </button>
+        </div>
+        <div class="hero__modes" role="group" aria-label="Scan-Modus der Demo">
+          <button type="button" class="hero__mode is-active" data-demo-mode="single" aria-pressed="true">
+            <Icon name="viewfinder" size={15} stroke={2.2} />
+            Einzeln
+          </button>
+          <button type="button" class="hero__mode" data-demo-mode="series" aria-pressed="false">
+            <Icon name="stack" size={15} stroke={2.2} />
+            Serie
+          </button>
+        </div>
+      </div>
+      <p class="hero__try-hint">Demo: Karte antippen, Modus wählen – Zahlen aus Cardmarkets Tagesliste vom 15.09.2026.</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    padding-block: clamp(1.5rem, 4vw, 2.5rem) clamp(3rem, 8vw, 5rem);
+    overflow: hidden;
+  }
+
+  /* Ein Hauch der Holo-Folie aus dem App-Symbol – tief im Hintergrund, langsam in Bewegung */
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: -20% -10% auto -10%;
+    height: 120%;
+    background:
+      radial-gradient(40% 50% at 70% 30%, rgba(88, 58, 156, 0.35), transparent 70%),
+      radial-gradient(35% 45% at 85% 65%, rgba(31, 106, 99, 0.3), transparent 70%),
+      radial-gradient(30% 40% at 55% 75%, rgba(141, 46, 106, 0.22), transparent 70%);
+    filter: blur(40px);
+    opacity: 0.45;
+    -webkit-mask-image: linear-gradient(180deg, #000 40%, transparent 95%);
+    mask-image: linear-gradient(180deg, #000 40%, transparent 95%);
+    animation: aurora 26s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes aurora {
+    from {
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    to {
+      transform: translate3d(-3%, 2%, 0) scale(1.06);
+    }
+  }
+
+  .hero > .container {
+    position: relative;
+    z-index: 1;
+  }
+
+  .hero__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+    align-items: center;
+    gap: clamp(2rem, 6vw, 5rem);
+  }
+
+  .hero__copy {
+    display: grid;
+    gap: 1.6rem;
+    justify-items: start;
+  }
+
+  .hero__brand {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-weight: 600;
+  }
+
+  .hero__icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 11px;
+    box-shadow:
+      0 0 0 1px rgba(255, 255, 255, 0.14),
+      0 8px 24px -8px rgba(0, 0, 0, 0.8);
+  }
+
+  .hero__brandname {
+    font-size: 1.125rem;
+    letter-spacing: -0.02em;
+  }
+
+  .hero__platform {
+    padding: 0.25rem 0.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.08);
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-soft);
+  }
+
+  .hero__accent {
+    color: var(--text-soft);
+    background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.55) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+  }
+
+  .hero__facts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.4rem;
+    margin: 0.25rem 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 0.9375rem;
+    color: var(--text-muted);
+  }
+
+  .hero__facts li {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  .hero__facts li::before {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--up);
+    box-shadow: 0 0 8px var(--up);
+  }
+
+  .hero__visual {
+    display: grid;
+    justify-items: center;
+    gap: 1.25rem;
+  }
+
+  .hero__try {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+  }
+
+  .hero__cards {
+    display: inline-flex;
+    gap: 0.35rem;
+    padding: 0.3rem;
+    border-radius: 16px;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .hero__card {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0.35rem 0.7rem 0.35rem 0.4rem;
+    border-radius: 12px;
+    color: var(--text-soft);
+    text-align: left;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      transform 0.16s var(--ease-snappy);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero__card:hover {
+    color: var(--text);
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .hero__card:active {
+    transform: scale(0.97);
+  }
+
+  .hero__card.is-active {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--text);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.18);
+  }
+
+  .hero__card-thumb {
+    position: relative;
+    width: 26px;
+    aspect-ratio: 63 / 88;
+    flex: none;
+  }
+
+  .hero__card-thumb :global(.card) {
+    border-radius: 3px;
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.2);
+  }
+
+  .hero__card-thumb :global(.card__foot) {
+    display: none;
+  }
+
+  .hero__card-meta {
+    display: grid;
+    line-height: 1.15;
+  }
+
+  .hero__card-meta b {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .hero__card-meta small {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .hero__modes {
+    display: inline-grid;
+    grid-template-columns: auto auto;
+    gap: 0.25rem;
+    padding: 0.25rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
+  }
+
+  .hero__mode {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    min-height: 2.25rem;
+    padding: 0 0.9rem;
+    border-radius: 999px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-soft);
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      transform 0.16s var(--ease-snappy);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hero__mode:hover {
+    color: var(--text);
+  }
+
+  .hero__mode:active {
+    transform: scale(0.96);
+  }
+
+  .hero__mode.is-active {
+    background: var(--accent);
+    color: var(--ink);
+  }
+
+  .hero__try-hint {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-align: center;
+    text-wrap: pretty;
+    max-width: 34em;
+  }
+
+  .hero__stage {
+    --phone-w: 340px;
+    --stage-pad-x: 3rem;
+    position: relative;
+    display: block;
+    width: min(100%, calc(var(--phone-w) + 2 * var(--stage-pad-x)));
+    padding: 2.25rem var(--stage-pad-x);
+    perspective: 1400px;
+  }
+
+  .hero__phone {
+    width: 100%;
+    transform-style: preserve-3d;
+    transition: transform 0.6s var(--ease-out);
+    will-change: transform;
+  }
+
+  /* Die grüne Linie aus dem App-Symbol – hinter dem Gerät, nur an den Rändern sichtbar */
+  .hero__scanline {
+    position: absolute;
+    left: -22%;
+    right: -22%;
+    top: 50%;
+    height: 2px;
+    border-radius: 999px;
+    background: linear-gradient(90deg, transparent, rgba(74, 222, 128, 0.75) 25%, rgba(74, 222, 128, 0.75) 75%, transparent);
+    box-shadow:
+      0 0 12px rgba(74, 222, 128, 0.45),
+      0 0 40px rgba(74, 222, 128, 0.2);
+    opacity: 0.8;
+    pointer-events: none;
+  }
+
+  /* Die Sucherecken aus dem App-Symbol – groß, leise, um das Gerät */
+  .hero__brackets {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .hero__brackets i {
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+    border: 2px solid rgba(255, 255, 255, 0.16);
+    border-radius: 4px;
+  }
+
+  .hero__brackets i:nth-child(1) {
+    top: 0;
+    left: 0;
+    border-right: 0;
+    border-bottom: 0;
+    border-top-left-radius: 8px;
+  }
+
+  .hero__brackets i:nth-child(2) {
+    top: 0;
+    right: 0;
+    border-left: 0;
+    border-bottom: 0;
+    border-top-right-radius: 8px;
+  }
+
+  .hero__brackets i:nth-child(3) {
+    bottom: 0;
+    left: 0;
+    border-right: 0;
+    border-top: 0;
+    border-bottom-left-radius: 8px;
+  }
+
+  .hero__brackets i:nth-child(4) {
+    bottom: 0;
+    right: 0;
+    border-left: 0;
+    border-top: 0;
+    border-bottom-right-radius: 8px;
+  }
+
+  @media (min-height: 1000px) and (min-width: 901px) {
+    .hero__stage {
+      --phone-w: 400px;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .hero {
+      padding-top: 2rem;
+    }
+
+    .hero__grid {
+      grid-template-columns: 1fr;
+      gap: 3rem;
+    }
+
+    .hero__visual {
+      order: 2;
+    }
+
+    .hero__stage {
+      --phone-w: 360px;
+      --stage-pad-x: 1.25rem;
+      padding-block: 1.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    /* Die Leiste zeigt Symbol und Namen schon – nicht zweimal untereinander */
+    .hero__brand {
+      display: none;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .hero__stage {
+      --phone-w: 320px;
+    }
+
+    .hero__scanline {
+      left: -4%;
+      right: -4%;
+    }
+
+    .hero__cta {
+      width: 100%;
+    }
+
+    .hero__cta > :global(*) {
+      flex: 1 1 100%;
+    }
+
+    /* Zwei Zeilen zu zwei statt drei plus eins */
+    .hero__facts {
+      display: grid;
+      grid-template-columns: repeat(2, max-content);
+      gap: 0.45rem 1.5rem;
+    }
+
+    /* Die Kartenwahl füllt die Breite; Namen bleiben in einer Zeile */
+    .hero__cards {
+      display: flex;
+      width: 100%;
+      gap: 0.25rem;
+    }
+
+    .hero__card {
+      flex: 1 1 0;
+      min-width: 0;
+      gap: 0.45rem;
+      padding: 0.3rem 0.4rem 0.3rem 0.35rem;
+    }
+
+    .hero__card-thumb {
+      width: 22px;
+    }
+
+    .hero__card-meta {
+      min-width: 0;
+    }
+
+    .hero__card-meta b {
+      font-size: 0.75rem;
+      white-space: nowrap;
+    }
+
+    .hero__card-meta small {
+      font-size: 0.6875rem;
+      white-space: nowrap;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .hero::before {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  // Das Gerät neigt sich leicht zur Maus – nur mit Zeiger, nicht bei
+  // reduzierter Bewegung. Ein Hauch, kein Effekt.
+  const fein = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduziert = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  document.querySelectorAll<HTMLElement>('[data-tilt]').forEach((stage) => {
+    const phone = stage.querySelector<HTMLElement>('.phone');
+    if (!phone || !fein || reduziert) return;
+    let raf = 0;
+    stage.addEventListener('pointermove', (e) => {
+      const r = stage.getBoundingClientRect();
+      const x = (e.clientX - r.left) / r.width - 0.5;
+      const y = (e.clientY - r.top) / r.height - 0.5;
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        phone.style.transform = `rotateY(${(x * 7).toFixed(2)}deg) rotateX(${(-y * 6).toFixed(2)}deg)`;
+      });
+    });
+    stage.addEventListener('pointerleave', () => {
+      cancelAnimationFrame(raf);
+      phone.style.transform = '';
+    });
+  });
+</script>

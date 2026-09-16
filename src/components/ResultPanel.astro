@@ -1,0 +1,286 @@
+---
+/**
+ * Das Ergebnisfeld des Scanners, groß und zum Anfassen: Normaldruck und
+ * Reverse Holo nebeneinander, weil die Kamera die Folie nicht sieht – und
+ * der Unterschied kein Detail ist. Aufbau nach `CardResultView.swift`.
+ *
+ * Die Zahlen sind echt: Dragoran aus „151“, Nr. 149, Cardmarket-Tagesliste
+ * vom 15.09.2026 – Normaldruck 0,63 €, Reverse Holo 3,87 €.
+ */
+import HoloCard from './HoloCard.astro';
+import Icon from './Icon.astro';
+
+interface Props {
+  class?: string;
+  [key: string]: unknown;
+}
+const { class: className = '', ...rest } = Astro.props;
+---
+
+<div class:list={['result', 'glass', className]} {...rest} data-result>
+  <div class="result__head">
+    <div class="result__thumb" data-thumb>
+      <div class="result__thumb-face result__thumb-face--normal"><HoloCard nummer="149/165" code="MEW DE" variante="plain" sheen={false} /></div>
+      <div class="result__thumb-face result__thumb-face--reverse"><HoloCard nummer="149/165" code="MEW DE" variante="reverse" /></div>
+    </div>
+    <div class="result__meta">
+      <p class="result__name">Dragoran</p>
+      <p class="result__set">151 · Nr. 149</p>
+      <p class="result__price num" data-price>0,63 €</p>
+      <p class="result__sub num" data-sub><span>Trend</span><span>⌀30 0,65 €</span><span>ab 0,05 €</span></p>
+    </div>
+  </div>
+
+  <div class="result__bestand">
+    <Icon name="check-circle" size={16} stroke={2} />
+    <span>In der Sammlung: 2× · NM, LP</span>
+  </div>
+
+  <div class="result__prints" role="radiogroup" aria-label="Druck">
+    <button
+      type="button"
+      class="result__print is-active"
+      role="radio"
+      aria-checked="true"
+      data-print="normal"
+      data-price="0,63 €"
+      data-sub="Trend|⌀30 0,65 €|ab 0,05 €"
+    >
+      <span>Normal</span>
+      <strong class="num">0,63 €</strong>
+    </button>
+    <button
+      type="button"
+      class="result__print"
+      role="radio"
+      aria-checked="false"
+      data-print="reverse"
+      data-price="3,87 €"
+      data-sub="Trend|⌀30 3,44 €|ab 1,80 €"
+    >
+      <span>Reverse</span>
+      <strong class="num">3,87 €</strong>
+    </button>
+  </div>
+
+  <div class="result__divider"></div>
+
+  <div class="result__markets">
+    <span><Icon name="search" size={13} stroke={2.4} />Cardmarket</span>
+    <span><Icon name="search" size={13} stroke={2.4} />eBay</span>
+    <span><Icon name="seal" size={13} stroke={2.2} />Verkauft</span>
+  </div>
+
+  <div class="result__add">
+    <Icon name="plus-circle" size={20} stroke={2} />
+    <span>Aufnehmen</span>
+  </div>
+</div>
+
+<style>
+  .result {
+    display: grid;
+    gap: 0.9rem;
+    padding: 1.25rem;
+    width: 100%;
+    max-width: 420px;
+    border-radius: var(--r-bar);
+  }
+
+  .result__head {
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+
+  .result__thumb {
+    position: relative;
+    width: 92px;
+    aspect-ratio: 63 / 88;
+    flex: none;
+    perspective: 600px;
+  }
+
+  .result__thumb-face {
+    position: absolute;
+    inset: 0;
+    transition:
+      opacity 0.35s var(--ease-out),
+      transform 0.45s var(--ease-out);
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .result__thumb-face--reverse {
+    opacity: 0;
+    transform: rotateY(-25deg);
+  }
+
+  .result.is-reverse .result__thumb-face--reverse {
+    opacity: 1;
+    transform: none;
+  }
+
+  .result.is-reverse .result__thumb-face--normal {
+    opacity: 0;
+    transform: rotateY(25deg);
+  }
+
+  .result__meta {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .result__name {
+    font-size: 1.375rem;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+    line-height: 1.15;
+  }
+
+  .result__set {
+    font-size: 0.9375rem;
+    color: var(--text-soft);
+  }
+
+  .result__price {
+    margin-top: 0.4rem;
+    font-size: 2.1rem;
+    font-weight: 700;
+    line-height: 1.05;
+    color: #fff;
+    text-shadow:
+      0 0 10px rgba(255, 255, 255, 0.3),
+      0 0 24px rgba(255, 255, 255, 0.1);
+    transition: opacity 0.2s;
+  }
+
+  .result__sub {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    white-space: nowrap;
+  }
+
+  .result__bestand {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--up);
+  }
+
+  .result__prints {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+  }
+
+  .result__print {
+    display: grid;
+    gap: 0.15rem;
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.07);
+    box-shadow: 0 0 0 1.5px transparent inset;
+    transition:
+      background-color 0.18s,
+      box-shadow 0.18s,
+      transform 0.16s var(--ease-snappy);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .result__print:hover {
+    background: rgba(255, 255, 255, 0.11);
+  }
+
+  .result__print:active {
+    transform: scale(0.97);
+  }
+
+  .result__print.is-active {
+    background: rgba(255, 255, 255, 0.16);
+    box-shadow: 0 0 0 1.5px #fff inset;
+  }
+
+  .result__print span {
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--text-soft);
+  }
+
+  .result__print.is-active span {
+    color: #fff;
+  }
+
+  .result__print strong {
+    font-size: 1.1875rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .result__divider {
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+
+  .result__markets {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.5rem;
+  }
+
+  .result__markets span {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.3rem;
+    height: 2.1rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .result__add {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.4rem;
+    height: 2.85rem;
+    border-radius: 12px;
+    background: #fff;
+    color: #000;
+    font-weight: 600;
+    box-shadow:
+      0 0 9px rgba(255, 255, 255, 0.18),
+      0 0 22px rgba(255, 255, 255, 0.08);
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-result]').forEach((root) => {
+    const prints = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-print]'));
+    const price = root.querySelector<HTMLElement>('[data-price]:not(button)');
+    const sub = root.querySelector<HTMLElement>('[data-sub]:not(button)');
+
+    prints.forEach((btn) =>
+      btn.addEventListener('click', () => {
+        prints.forEach((b) => {
+          const aktiv = b === btn;
+          b.classList.toggle('is-active', aktiv);
+          b.setAttribute('aria-checked', String(aktiv));
+        });
+        root.classList.toggle('is-reverse', btn.dataset.print === 'reverse');
+        if (price) price.textContent = btn.dataset.price ?? '';
+        if (sub) sub.replaceChildren(...(btn.dataset.sub ?? '').split('|').map((t) => Object.assign(document.createElement('span'), { textContent: t })));
+      }),
+    );
+  });
+</script>

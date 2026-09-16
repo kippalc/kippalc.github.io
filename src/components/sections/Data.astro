@@ -1,0 +1,213 @@
+---
+/**
+ * Deine Sammlung, deine Daten – die Aussagen der Datenschutzerklärung und
+ * des Über-Screens, verständlich gemacht. Nichts davon ist Marketing: kein
+ * Konto, kein Server, kein Tracking, keine Werbenetzwerke, tägliche Sicherung.
+ */
+import Icon from '../Icon.astro';
+
+const punkte = [
+  { icon: 'lock', titel: 'Kein Konto, keine Anmeldung', text: 'Die App braucht keinen Zugang – und legt nirgendwo einen an. Deine Sammlung, deine Fotos und deine Notizen bleiben auf dem iPhone.' },
+  { icon: 'eye', titel: 'Kein Tracking, keine Werbenetzwerke', text: 'Keine Analyse-, Werbe- oder Absturzberichtsdienste. Null Fremdpakete im Projekt, nachgezählt. Die App fragt auch nicht nach einer Tracking-Erlaubnis.' },
+  { icon: 'camera', titel: 'Kamera nur zum Lesen', text: 'Die Texterkennung läuft auf dem Gerät. Es wird kein Kamerabild übertragen – nachgeschlagen wird nur, was gelesen wurde: Name und Nummer.' },
+  { icon: 'download', titel: 'Sicherung, täglich, von selbst', text: 'In „Dateien“ ▸ Auf meinem iPhone ▸ KippScan liegt jeden Tag eine vollständige Sicherung samt Preisverlauf. Dazu Export als CSV und PDF, jederzeit.' },
+] as const;
+
+const quellen = [
+  { name: 'TCGdex', was: 'Karten, Sets und Nummern', wie: 'Offenes Gemeinschaftsprojekt. Die deutsche Liste liegt mit der App am Gerät.' },
+  { name: 'Cardmarket', was: 'Preise', wie: 'Öffentliche Tagesliste – Durchschnitte tatsächlicher Verkäufe, keine Angebote.' },
+  { name: 'eBay', was: 'Suchen und Angebote', wie: 'Gewöhnliche Suchlinks. Genau ein Knopf („Gegradet: PSA 10 bei eBay“) ist ein gekennzeichneter Werbelink.' },
+];
+---
+
+<section class="data section" id="daten">
+  <div class="container">
+    <div class="data__grid">
+      <div class="data__copy reveal">
+        <h2 class="h2">Deine Sammlung. Deine Daten.</h2>
+        <p class="lead">
+          Ins Netz geht die App nur für Kartendaten, Preise und Kartenbilder – dafür braucht es weder
+          Anmeldung noch Kennung. Alles andere bleibt, wo es hingehört.
+        </p>
+        <a class="btn btn--ghost btn--sm data__link" href="/datenschutz.html">
+          Datenschutzerklärung lesen
+          <Icon name="arrow-right" size={16} />
+        </a>
+      </div>
+
+      <ul class="data__points">
+        {
+          punkte.map((p, i) => (
+            <li class="reveal" style={`--delay:${i * 0.07}s`}>
+              <span class="data__icon">
+                <Icon name={p.icon} size={20} />
+              </span>
+              <div>
+                <h3>{p.titel}</h3>
+                <p>{p.text}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+
+    <div class="data__sources reveal">
+      <p class="data__sources-head">Woher die Daten kommen</p>
+      <dl class="data__sources-list">
+        {
+          quellen.map((q) => (
+            <div>
+              <dt>
+                {q.name}
+                <span>{q.was}</span>
+              </dt>
+              <dd>{q.wie}</dd>
+            </div>
+          ))
+        }
+      </dl>
+    </div>
+  </div>
+</section>
+
+<style>
+  .data__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(2.5rem, 6vw, 5rem);
+    align-items: start;
+  }
+
+  .data__copy {
+    display: grid;
+    gap: 1.1rem;
+    justify-items: start;
+    position: sticky;
+    top: calc(var(--nav-h) + 2rem);
+  }
+
+  .data__link {
+    margin-top: 0.5rem;
+  }
+
+  .data__points {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 2.5rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .data__points li {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.5rem 0;
+    border-top: 1px solid var(--hairline);
+  }
+
+  .data__points li > div {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .data__icon {
+    display: inline-grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: var(--chip-fill);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+    color: var(--text);
+  }
+
+  .data__points h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .data__points p {
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    text-wrap: pretty;
+  }
+
+  .data__sources {
+    margin-top: clamp(2.5rem, 6vw, 4rem);
+    padding-top: clamp(2rem, 5vw, 3rem);
+    border-top: 1px solid var(--hairline);
+    display: grid;
+    gap: 1.25rem;
+  }
+
+  .data__sources-head {
+    font-size: 0.8125rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .data__sources-list {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 2rem;
+    margin: 0;
+  }
+
+  .data__sources-list div {
+    display: grid;
+    gap: 0.4rem;
+  }
+
+  .data__sources-list dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.5rem;
+    font-weight: 600;
+  }
+
+  .data__sources-list dt span {
+    font-size: 0.8125rem;
+    font-weight: 500;
+    color: var(--text-muted);
+  }
+
+  .data__sources-list dd {
+    margin: 0;
+    font-size: 0.9rem;
+    color: var(--text-soft);
+    text-wrap: pretty;
+  }
+
+  @media (max-width: 900px) {
+    .data__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .data__copy {
+      position: static;
+    }
+
+    .data__sources-list {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+
+  @media (max-width: 560px) {
+    .data__points {
+      grid-template-columns: 1fr;
+    }
+
+    .data__points li {
+      padding: 1.2rem 0;
+    }
+  }
+</style>

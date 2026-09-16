@@ -1,0 +1,205 @@
+---
+/**
+ * Die Zustandsleiter aus dem Positionsblatt – sieben Cardmarket-Stufen von
+ * Poor bis Mint, und darunter steht sofort, was die Wahl in Euro bedeutet.
+ * Zum Antippen.
+ * Aufbau und Farben nach `ConditionPicker.swift`; die Faktoren sind die der
+ * App (Schätzwerte, siehe README „Zustand“).
+ */
+import { euro, ZUSTAENDE } from '../data/farben';
+
+interface Props {
+  /** Marktwert bei Near Mint */
+  referenz: number;
+  /** Vorgewählte Stufe */
+  start?: (typeof ZUSTAENDE)[number]['kurz'];
+  class?: string;
+  [key: string]: unknown;
+}
+const { referenz, start = 'NM', class: className = '', ...rest } = Astro.props;
+// Von der schlechtesten zur besten Stufe – so zeichnet die App die Leiter
+// (`CardCondition.ascending`): PO links, MT rechts.
+const stufen = [...ZUSTAENDE].reverse().map((z) => ({
+  ...z,
+  wert: euro(referenz * z.faktor),
+  abschlag: z.faktor === 1 ? 'voller Marktwert' : `−${Math.round((1 - z.faktor) * 100)} %`,
+}));
+const aktiv = stufen.find((z) => z.kurz === start) ?? stufen[1];
+---
+
+<div class:list={['ladder', className]} {...rest} data-ladder>
+  <div class="ladder__track" role="radiogroup" aria-label="Zustand">
+    {
+      stufen.map((z) => (
+        <button
+          type="button"
+          class:list={['ladder__step', { 'is-active': z.kurz === aktiv.kurz }]}
+          role="radio"
+          aria-checked={z.kurz === aktiv.kurz ? 'true' : 'false'}
+          aria-label={`${z.name} – ${z.wert}`}
+          style={`--tint:${z.tint};--hell:${z.hell}`}
+          data-step
+          data-name={z.name}
+          data-detail={z.detail}
+          data-wert={z.wert}
+          data-abschlag={z.abschlag}
+          data-hell={z.hell}
+        >
+          {z.kurz}
+        </button>
+      ))
+    }
+  </div>
+  <div class="ladder__summary">
+    <div class="ladder__desc">
+      <strong data-out="name">{aktiv.name}</strong>
+      <span data-out="detail">{aktiv.detail}</span>
+    </div>
+    <div class="ladder__value">
+      <strong class="num" data-out="wert" style={`color:${aktiv.hell}`}>{aktiv.wert}</strong>
+      <span data-out="abschlag">{aktiv.abschlag}</span>
+    </div>
+  </div>
+</div>
+
+<style>
+  .ladder {
+    display: grid;
+    gap: 0.85rem;
+  }
+
+  .ladder__track {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr);
+    gap: 4px;
+    padding: 4px;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .ladder__step {
+    position: relative;
+    height: 42px;
+    border-radius: 10px;
+    background: color-mix(in srgb, var(--tint) 24%, transparent);
+    color: var(--hell);
+    font-family: var(--font-rounded);
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.01em;
+    transition:
+      background-color 0.22s var(--ease-snappy),
+      color 0.22s,
+      box-shadow 0.22s,
+      transform 0.16s var(--ease-snappy);
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .ladder__step:hover {
+    background: color-mix(in srgb, var(--tint) 38%, transparent);
+  }
+
+  .ladder__step:active {
+    transform: scale(0.95);
+  }
+
+  .ladder__step.is-active {
+    background: var(--tint);
+    color: #fff;
+    box-shadow:
+      0 0 6px color-mix(in srgb, var(--tint) 30%, transparent),
+      0 0 14px color-mix(in srgb, var(--tint) 12%, transparent);
+  }
+
+  .ladder__step:focus-visible {
+    outline-offset: 1px;
+  }
+
+  .ladder__summary {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-inline: 2px;
+  }
+
+  .ladder__desc {
+    display: grid;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+
+  .ladder__desc strong {
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  .ladder__desc span,
+  .ladder__value span {
+    font-size: 0.8125rem;
+    color: var(--text-muted);
+    text-wrap: pretty;
+  }
+
+  .ladder__value {
+    display: grid;
+    gap: 0.15rem;
+    text-align: right;
+    flex: none;
+  }
+
+  .ladder__value strong {
+    font-size: 1.125rem;
+    font-weight: 700;
+    transition: color 0.25s;
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-ladder]').forEach((root) => {
+    const steps = Array.from(root.querySelectorAll<HTMLButtonElement>('[data-step]'));
+    const out = (key: string) => root.querySelector<HTMLElement>(`[data-out="${key}"]`);
+
+    const waehle = (step: HTMLButtonElement) => {
+      steps.forEach((s) => {
+        const aktiv = s === step;
+        s.classList.toggle('is-active', aktiv);
+        s.setAttribute('aria-checked', String(aktiv));
+        s.tabIndex = aktiv ? 0 : -1;
+      });
+      for (const key of ['name', 'detail', 'wert', 'abschlag']) {
+        const el = out(key);
+        if (el) el.textContent = step.dataset[key] ?? '';
+      }
+      const wert = out('wert');
+      if (wert) wert.style.color = step.dataset.hell ?? '';
+    };
+
+    steps.forEach((s, i) => {
+      s.tabIndex = s.classList.contains('is-active') ? 0 : -1;
+      s.addEventListener('click', () => waehle(s));
+      s.addEventListener('keydown', (e) => {
+        const delta = e.key === 'ArrowRight' || e.key === 'ArrowDown' ? 1 : e.key === 'ArrowLeft' || e.key === 'ArrowUp' ? -1 : 0;
+        if (!delta) return;
+        e.preventDefault();
+        const next = steps[(i + delta + steps.length) % steps.length];
+        waehle(next);
+        next.focus();
+      });
+    });
+
+    // Über die Leiter ziehen – wie in der App
+    let ziehen = false;
+    const treffe = (x: number) => {
+      const hit = document.elementFromPoint(x, root.querySelector('.ladder__track')!.getBoundingClientRect().top + 20);
+      const step = hit?.closest<HTMLButtonElement>('[data-step]');
+      if (step && !step.classList.contains('is-active')) waehle(step);
+    };
+    root.addEventListener('pointerdown', (e) => {
+      if ((e.target as HTMLElement).closest('.ladder__track')) ziehen = true;
+    });
+    window.addEventListener('pointerup', () => (ziehen = false));
+    root.addEventListener('pointermove', (e) => {
+      if (ziehen) treffe(e.clientX);
+    });
+  });
+</script>
