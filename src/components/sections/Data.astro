@@ -7,17 +7,11 @@
 import Icon from '../Icon.astro';
 
 const punkte = [
-  { icon: 'lock', titel: 'Kein Konto, keine Anmeldung', text: 'Die App braucht keinen Zugang – und legt nirgendwo einen an. Deine Sammlung, deine Fotos und deine Notizen bleiben auf dem iPhone.' },
-  { icon: 'eye', titel: 'Kein Tracking, keine Werbenetzwerke', text: 'Keine Analyse-, Werbe- oder Absturzberichtsdienste. Null Fremdpakete im Projekt, nachgezählt. Die App fragt auch nicht nach einer Tracking-Erlaubnis.' },
-  { icon: 'camera', titel: 'Kamera nur zum Lesen', text: 'Die Texterkennung läuft auf dem Gerät. Es wird kein Kamerabild übertragen – nachgeschlagen wird nur, was gelesen wurde: Name und Nummer.' },
-  { icon: 'download', titel: 'Sicherung, täglich, von selbst', text: 'In „Dateien“ ▸ Auf meinem iPhone ▸ KippScan liegt jeden Tag eine vollständige Sicherung samt Preisverlauf. Dazu Export als CSV und PDF, jederzeit.' },
+  { icon: 'lock', titel: 'Kein Konto, keine Anmeldung', text: 'Deine Sammlung, deine Fotos und deine Notizen bleiben auf dem iPhone. Niemand sonst sieht sie.' },
+  { icon: 'eye', titel: 'Kein Tracking, keine Werbenetzwerke', text: 'Keine Analyse-, Werbe- oder Absturzberichtsdienste – die App fragt nicht einmal nach einer Tracking-Erlaubnis.' },
+  { icon: 'camera', titel: 'Kein Bild verlässt das Gerät', text: 'Die Kamera liest auf dem iPhone. Nachgeschlagen wird nur, was gelesen wurde – nie das Foto.' },
+  { icon: 'download', titel: 'Sicherung, täglich, von selbst', text: 'Jeden Tag eine vollständige Sicherung in „Dateien“. Dazu Export als CSV und PDF, jederzeit.' },
 ] as const;
-
-const quellen = [
-  { name: 'TCGdex', was: 'Karten, Sets und Nummern', wie: 'Offenes Gemeinschaftsprojekt. Die deutsche Liste liegt mit der App am Gerät.' },
-  { name: 'Cardmarket', was: 'Preise', wie: 'Öffentliche Tagesliste – Durchschnitte tatsächlicher Verkäufe, keine Angebote.' },
-  { name: 'eBay', was: 'Suchen und Angebote', wie: 'Gewöhnliche Suchlinks. Genau ein Knopf („Gegradet: PSA 10 bei eBay“) ist ein gekennzeichneter Werbelink.' },
-];
 ---
 
 <section class="data section" id="daten">
@@ -26,8 +20,7 @@ const quellen = [
       <div class="data__copy reveal">
         <h2 class="h2">Deine Sammlung. Deine Daten.</h2>
         <p class="lead">
-          Ins Netz geht die App nur für Kartendaten, Preise und Kartenbilder – dafür braucht es weder
-          Anmeldung noch Kennung. Alles andere bleibt, wo es hingehört.
+          Ins Netz geht die App nur für Kartendaten und Preise. Alles andere bleibt, wo es hingehört.
         </p>
         <a class="btn btn--ghost btn--sm data__link" href="/datenschutz.html">
           Datenschutzerklärung lesen
@@ -52,22 +45,6 @@ const quellen = [
       </ul>
     </div>
 
-    <div class="data__sources reveal">
-      <p class="data__sources-head">Woher die Daten kommen</p>
-      <dl class="data__sources-list">
-        {
-          quellen.map((q) => (
-            <div>
-              <dt>
-                {q.name}
-                <span>{q.was}</span>
-              </dt>
-              <dd>{q.wie}</dd>
-            </div>
-          ))
-        }
-      </dl>
-    </div>
   </div>
 </section>
 
@@ -137,54 +114,12 @@ const quellen = [
     text-wrap: pretty;
   }
 
-  .data__sources {
-    margin-top: clamp(2.5rem, 6vw, 4rem);
-    padding-top: clamp(2rem, 5vw, 3rem);
-    border-top: 1px solid var(--hairline);
-    display: grid;
-    gap: 1.25rem;
-  }
 
-  .data__sources-head {
-    font-size: 0.8125rem;
-    font-weight: 600;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--text-muted);
-  }
 
-  .data__sources-list {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 2rem;
-    margin: 0;
-  }
 
-  .data__sources-list div {
-    display: grid;
-    gap: 0.4rem;
-  }
 
-  .data__sources-list dt {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.5rem;
-    font-weight: 600;
-  }
 
-  .data__sources-list dt span {
-    font-size: 0.8125rem;
-    font-weight: 500;
-    color: var(--text-muted);
-  }
 
-  .data__sources-list dd {
-    margin: 0;
-    font-size: 0.9rem;
-    color: var(--text-soft);
-    text-wrap: pretty;
-  }
 
   @media (max-width: 900px) {
     .data__grid {
@@ -193,11 +128,6 @@ const quellen = [
 
     .data__copy {
       position: static;
-    }
-
-    .data__sources-list {
-      grid-template-columns: 1fr;
-      gap: 1.25rem;
     }
   }
 

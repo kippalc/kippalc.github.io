@@ -27,8 +27,7 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
           <h3>Widget, Siri und Suchfeld</h3>
           <p>
             Der Wert deiner Sammlung auf dem Home-Screen und dem Sperrbildschirm. „Was ist meine Sammlung in
-            KippScan wert?“ – Siri sagt es, ohne die App zu öffnen. Deine Karten stehen im Suchfeld des
-            iPhones, und das App-Symbol kennt „Karte scannen“, „Wunschliste“ und „Sammlung“.
+            KippScan wert?“ – Siri sagt es, ohne die App zu öffnen.
           </p>
         </div>
       </article>
@@ -43,7 +42,7 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
         </div>
         <div class="tile__text">
           <h3>Serienmodus</h3>
-          <p>Ganze Stapel: Sichere Treffer landen ohne Tippen in der Sammlung, unsichere halten an. Zustand und Kaufpreis gelten für den ganzen Stapel.</p>
+          <p>Ganze Stapel: Karte für Karte vor die Kamera, sichere Treffer landen ohne Tippen in der Sammlung.</p>
         </div>
       </article>
 
@@ -57,7 +56,7 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
         </div>
         <div class="tile__text">
           <h3>Gegradete Karten</h3>
-          <p>PSA, BGS, CGC, SGC, ACE und TAG. Der Wert wird aus dem Rohpreis und einem gemessenen Aufschlag für Note und Jahrgang hochgerechnet – die PSA-Zertifikatsnummer liest die App vom Etikett.</p>
+          <p>PSA, BGS, CGC, SGC, ACE und TAG – mit hochgerechnetem Wert für Note und Jahrgang. Die PSA-Zertifikatsnummer liest die App vom Etikett.</p>
         </div>
       </article>
 
@@ -70,26 +69,12 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
         </div>
         <div class="tile__text">
           <h3>Versiegelte Ware</h3>
-          <p>{fmt(ZAHLEN.versiegelteProdukte)} Produkte mit Tagespreis, deutsche Namen inklusive. Dieselbe Frage wie bei Karten – was habe ich, was ist es wert – nur ein anderer Gegenstand.</p>
-        </div>
-      </article>
-
-      <!-- Liste einlesen -->
-      <article class="tile glass glass--hover reveal" style="--delay:.2s">
-        <div class="tile__demo">
-          <div class="ui-import">
-            <p class="ui-import__in">2x Glurak 4/102 NM<br />Pikachu 025/165 (151) x3<br />Relaxo, 151, 143</p>
-            <p class="ui-import__out"><Icon name="check-circle" size={14} stroke={2.2} />3 Karten erkannt · 6 Stück</p>
-          </div>
-        </div>
-        <div class="tile__text">
-          <h3>Liste einlesen</h3>
-          <p>Aus Notizen, aus einer Tabelle oder dem Export einer anderen App. Zugeordnet wie beim Scan – nichts wird geraten, jede unklare Zeile sagt, warum.</p>
+          <p>{fmt(ZAHLEN.versiegelteProdukte)} Produkte mit Tagespreis – Displays, Boxen, Booster, Tins. In derselben Sammlung wie deine Karten.</p>
         </div>
       </article>
 
       <!-- Export & Sicherung -->
-      <article class="tile glass glass--hover reveal" style="--delay:.25s">
+      <article class="tile glass glass--hover reveal" style="--delay:.2s">
         <div class="tile__demo">
           <ul class="ui-files">
             <li><Icon name="doc" size={16} />kippscan-2026-09-16.csv<small>für Excel, mit Dezimalkomma</small></li>
@@ -99,27 +84,12 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
         </div>
         <div class="tile__text">
           <h3>Export und Sicherung</h3>
-          <p>CSV für Excel, Inventarliste als PDF, vollständige Sicherung samt Preisverlauf. Einlesen ergänzt nur und löscht nie.</p>
-        </div>
-      </article>
-
-      <!-- Tauschliste -->
-      <article class="tile glass glass--hover reveal" style="--delay:.3s">
-        <div class="tile__demo">
-          <div class="ui-text">
-            <p class="ui-text__title">Tauschliste – 12 Karten doppelt</p>
-            <p class="ui-text__body">Raichu · 151 026 · 2× übrig · NM · 0,26 €<br />Dragoran · 151 149 · 1× übrig · NM/LP · 0,63 €<br />Mew-ex · 151 205 · 1× übrig · NM · 26,93 €<br />…</p>
-            <p class="ui-text__share"><Icon name="upload" size={13} stroke={2.2} />Teilen</p>
-          </div>
-        </div>
-        <div class="tile__text">
-          <h3>Tausch- und Fehllisten</h3>
-          <p>Nur Doppelte, Fehlliste je Set, Wunschliste – als Text zum Weitergeben. In die Tauschgruppe, zum Händler.</p>
+          <p>CSV für Excel, Inventarliste als PDF, vollständige Sicherung – täglich von selbst in „Dateien“.</p>
         </div>
       </article>
 
       <!-- Offline -->
-      <article class="tile glass glass--hover reveal" style="--delay:.35s">
+      <article class="tile glass glass--hover reveal" style="--delay:.25s">
         <div class="tile__demo">
           <div class="ui-offline">
             <Icon name="wifi-slash" size={28} />
@@ -128,49 +98,33 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
         </div>
         <div class="tile__text">
           <h3>Funktioniert ohne Netz</h3>
-          <p>Fällt die Kartendatenbank aus, werden Karten weiter zugeordnet und Preise weiter aus der zuletzt geladenen Tagesliste geholt. Ein neues Set ist am Erscheinungstag dabei.</p>
-        </div>
-      </article>
-
-      <!-- Verkaufsbuch -->
-      <article class="tile glass glass--hover reveal" style="--delay:.38s">
-        <div class="tile__demo">
-          <div class="ui-sale">
-            <p class="ui-sale__bar"><span>Abbrechen</span><b>Verkauf</b><span class="ui-sale__go">Eintragen</span></p>
-            <p class="ui-sale__row"><span>Verkaufspreis je Stück</span><b class="num" data-preis>594,65 €</b><b class="num ui-sale__leer" data-ohne-preis hidden>0,00 €</b></p>
-            <p class="ui-sale__row"><span>Verkauft am</span><b>heute</b></p>
-            <p class="ui-sale__hint" data-preis>Vorbelegt mit dem Marktwert von heute (594,65 € je Stück).</p>
-          </div>
-        </div>
-        <div class="tile__text">
-          <h3>Verkaufsbuch</h3>
-          <p>„Als verkauft eintragen“ in jedem Positionsblatt. Erlös und realisierter Gewinn stehen im Wertverlauf – und in Sicherung, CSV und Textliste.</p>
+          <p>Kartenliste und Preise liegen auf dem iPhone – scannen und nachschlagen geht auch ohne Netz.</p>
         </div>
       </article>
 
       <!-- Preise ausblenden -->
-      <article class="tile glass glass--hover tile--wide tile--wide-end reveal" style="--delay:.4s">
+      <article class="tile glass glass--hover tile--wide tile--wide-end reveal" style="--delay:.3s">
         <div class="tile__demo tile__demo--toggle">
           <button type="button" class="ui-toggle" role="switch" aria-checked="false" data-preise-schalter>
             <span><Icon name="euro" size={18} />Preise ausblenden</span>
             <i class="ui-toggle__switch" aria-hidden="true"></i>
           </button>
           <p class="ui-toggle__hint" aria-live="polite">
-            <span data-preis>Leg den Schalter um – Widget, Serienleiste und Verkaufsblatt oben ziehen mit.</span>
-            <span data-ohne-preis hidden>So sieht die App aus: Widget, Serienleiste und Verkaufsblatt ohne eine Zahl. Listen bleiben vollständig.</span>
+            <span data-preis>Leg den Schalter um – Widget und Serienleiste oben ziehen mit.</span>
+            <span data-ohne-preis hidden>So sieht die App aus: Widget und Serienleiste ohne eine Zahl.</span>
           </p>
         </div>
         <div class="tile__text">
           <h3>Sammeln ohne Zahlen</h3>
-          <p>Ein Schalter, und keine Zahl mit Euro steht mehr in der App – auch nicht im Widget, bei Siri oder im Suchfeld. Kein Platzhalter, keine leere Kachel: Die Zeilen gibt es dann einfach nicht. Für alle, die wegen der Karten sammeln.</p>
+          <p>Ein Schalter, und keine Zahl mit Euro steht mehr in der App – auch nicht im Widget oder bei Siri. Für alle, die wegen der Karten sammeln.</p>
         </div>
       </article>
     </div>
 
     <p class="more__also reveal">
-      Außerdem: Notiz und eigene Fotos je Position · Suche von Hand auf Deutsch,
-      Englisch und Französisch · Foto-Modus statt Kamera · Karte groß zum Prüfen · durch ein Set blättern ·
-      Stapelaktionen · Positionen „zu prüfen“ · Protokoll der letzten Scans für den Support.
+      Außerdem: Liste einlesen aus Notizen oder Tabellen · Tausch- und Fehllisten als Text · Verkaufsbuch mit
+      Gewinn · Sammeln nach Illustrator · alle Drucke eines Pokémon · Notiz und eigene Fotos je Karte ·
+      Foto-Modus statt Kamera · Stapelaktionen.
     </p>
   </div>
 </section>
@@ -344,33 +298,6 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
     font-weight: 500;
   }
 
-  /* Import */
-  .ui-import {
-    width: min(100%, 280px);
-    display: grid;
-    gap: 0.5rem;
-  }
-
-  .ui-import__in {
-    padding: 0.7rem 0.85rem;
-    border-radius: 10px;
-    background: rgba(255, 255, 255, 0.06);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
-    font-family: var(--font-mono);
-    font-size: 0.75rem;
-    line-height: 1.55;
-    color: var(--text-soft);
-  }
-
-  .ui-import__out {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    font-size: 0.8125rem;
-    font-weight: 600;
-    color: var(--up);
-  }
-
   /* Dateien */
   .ui-files {
     width: min(100%, 300px);
@@ -402,41 +329,6 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
     font-size: 0.7rem;
     font-weight: 400;
     color: var(--text-muted);
-  }
-
-  /* Textliste */
-  .ui-text {
-    width: min(100%, 290px);
-    display: grid;
-    gap: 0.4rem;
-    padding: 0.85rem 1rem;
-    border-radius: 14px;
-    background: rgba(28, 28, 30, 0.85);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-  }
-
-  .ui-text__title {
-    font-size: 0.8125rem;
-    font-weight: 600;
-  }
-
-  .ui-text__body {
-    font-size: 0.75rem;
-    line-height: 1.5;
-    color: var(--text-muted);
-    font-variant-numeric: tabular-nums;
-  }
-
-  .ui-text__share {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.35rem;
-    width: fit-content;
-    padding: 0.3rem 0.65rem;
-    border-radius: 999px;
-    background: rgba(255, 255, 255, 0.1);
-    font-size: 0.75rem;
-    font-weight: 600;
   }
 
   /* Offline */
@@ -531,60 +423,6 @@ const fmt = (n: number) => n.toLocaleString('de-DE');
     line-height: 1.45;
     color: var(--text-muted);
     text-wrap: pretty;
-  }
-
-  .ui-sale__leer {
-    color: var(--text-muted);
-    font-weight: 400;
-  }
-
-  /* Verkauf */
-  .ui-sale {
-    width: min(100%, 290px);
-    display: grid;
-    gap: 0.4rem;
-    padding: 0.85rem 1rem;
-    border-radius: 14px;
-    background: rgba(28, 28, 30, 0.85);
-    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.12);
-    font-size: 0.8125rem;
-  }
-
-  .ui-sale__bar {
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    margin-bottom: 0.3rem;
-    padding-bottom: 0.5rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-    color: var(--text-soft);
-  }
-
-  .ui-sale__bar b {
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .ui-sale__go {
-    text-align: right;
-    font-weight: 600;
-    color: var(--text);
-  }
-
-  .ui-sale__row {
-    display: flex;
-    justify-content: space-between;
-    color: var(--text-soft);
-  }
-
-  .ui-sale__row b {
-    color: var(--text);
-    font-weight: 600;
-  }
-
-  .ui-sale__hint {
-    font-size: 0.7rem;
-    color: var(--text-muted);
   }
 
   .tile--wide-end .tile__demo {

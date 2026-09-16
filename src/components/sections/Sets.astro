@@ -17,10 +17,7 @@ import SetDetailDemo from '../SetDetailDemo.astro';
   <div class="container">
     <div class="section-head section-head--center reveal">
       <h2 class="h2">Ganze Sets im Blick.</h2>
-      <p class="lead">
-        Die Sammlung beantwortet „Was habe ich?“. Der Sets-Reiter die andere Hälfte: Was fehlt noch – und
-        was kostet der Rest?
-      </p>
+      <p class="lead">Was fehlt noch – und was kostet der Rest? Jedes Set mit Fortschritt, Fehlliste und Preis.</p>
     </div>
 
     <div class="sets__stage">
@@ -43,32 +40,17 @@ import SetDetailDemo from '../SetDetailDemo.astro';
       <li class="reveal">
         <Icon name="euro" size={22} />
         <h3>Was kostet der Rest?</h3>
-        <p>Die Summe der fehlenden Karten aus Cardmarkets Tagesliste – in jeder Zeile als Größenordnung, im Set genau, mit Variantenrechnung.</p>
+        <p>Die Summe der fehlenden Karten zu Tagespreisen – in jeder Zeile als Größenordnung, im Set genau.</p>
       </li>
       <li class="reveal" style="--delay:.06s">
         <Icon name="circle-dashed" size={22} />
         <h3>Filter „Fehlend“</h3>
-        <p>Der Einkaufszettel. Günstige fehlende Karten stehen grün, jede Kachel trägt ihren Preis. Ein Tipp: „Habe ich doch – aufnehmen“.</p>
+        <p>Der Einkaufszettel: Günstige fehlende Karten stehen grün, jede Kachel trägt ihren Preis.</p>
       </li>
       <li class="reveal" style="--delay:.12s">
         <Icon name="star" size={22} />
         <h3>Wunschliste</h3>
-        <p>Karten vormerken, nach Preis sortieren – und sehen, was sie kosten, wenn du geduldig nach dem günstigsten Angebot suchst.</p>
-      </li>
-      <li class="reveal" style="--delay:.18s">
-        <Icon name="doc" size={22} />
-        <h3>Fehlliste als Text</h3>
-        <p>Fehlliste je Set, Tauschliste (nur Doppelte) und Wunschliste zum Weitergeben – in die Tauschgruppe, zum Händler.</p>
-      </li>
-      <li class="reveal" style="--delay:.24s">
-        <Icon name="layers" size={22} />
-        <h3>Alle Drucke eines Pokémon</h3>
-        <p>Welche Gluraks hast du, welche fehlen – quer durch alle Sets. 105 Drucke in 45 Sets, im Verzeichnis nachgezählt.</p>
-      </li>
-      <li class="reveal" style="--delay:.3s">
-        <Icon name="brush" size={22} />
-        <h3>Sammeln nach Illustrator</h3>
-        <p>„Alles von Mitsuhiro Arita“ ist ein Sammelziel wie ein Set – nur über Dutzende Sets verstreut. 386 Namen, mitgeliefert.</p>
+        <p>Karten vormerken, nach Preis sortieren – und sehen, was sie kosten, wenn du geduldig suchst.</p>
       </li>
     </ul>
   </div>
@@ -146,9 +128,6 @@ import SetDetailDemo from '../SetDetailDemo.astro';
       gap: 3rem;
     }
 
-    .sets__features {
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-    }
   }
 
   @media (max-width: 640px) {

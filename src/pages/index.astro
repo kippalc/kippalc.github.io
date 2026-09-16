@@ -2,7 +2,6 @@
 import Base from '../layouts/Base.astro';
 import Hero from '../components/sections/Hero.astro';
 import Proof from '../components/sections/Proof.astro';
-import HowItWorks from '../components/sections/HowItWorks.astro';
 import Recognition from '../components/sections/Recognition.astro';
 import Collection from '../components/sections/Collection.astro';
 import Sets from '../components/sections/Sets.astro';
@@ -16,10 +15,9 @@ import Download from '../components/sections/Download.astro';
 import { SITE } from '../data/site';
 ---
 
-<Base title={`${SITE.name} – Pokémon-Karten per Nummer erkennen`} path="/" withAppSchema>
+<Base title={`${SITE.name} – Pokémon-Karten scannen, Wert sehen`} path="/" withAppSchema>
   <Hero />
   <Proof />
-  <HowItWorks />
   <Recognition />
   <Collection />
   <Sets />

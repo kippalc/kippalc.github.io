@@ -1,7 +1,9 @@
 # KippScan – Website
 
 Die offizielle Seite der iPhone-App KippScan: Support-Adresse für den App-Store-Eintrag,
-Datenschutzerklärung, Impressum – und eine Produktseite, die die App erklärt.
+Datenschutzerklärung, Impressum – und eine Produktseite, die zeigt, was die App kann. Sie erklärt
+nicht, wie die Erkennung arbeitet, sondern was dabei herauskommt: Karte scannen, Preis sehen,
+Sammlung führen.
 
 Gebaut mit [Astro](https://astro.build) als rein statische Seite: kein Server, keine
 Datenbank, keine externen Schriften, keine Analyse-Skripte. Alles, was die
@@ -28,19 +30,18 @@ src/
 ├── layouts/Legal.astro   Rahmen für Impressum und Datenschutz
 ├── pages/                index, impressum, datenschutz, 404, intern/og (Vorlage fürs Social-Bild)
 ├── components/           Bausteine: Telefonrahmen, Scanner-Demo (Einzeln/Serie, Karte wählbar), Holo-Karte,
-│                         Vorher/Nachher-Schieber (Compare), Zustandsleiter, Set-Ansicht mit Filter (SetDetailDemo),
-│                         Widget in allen Größen (WidgetDemo), Ringe, Kurve …
-├── components/sections/  Die Abschnitte der Startseite in Lesereihenfolge (Hero → Zahlen → So funktioniert's →
-│                         Nach dem Scan → Sammlung → Sets → Preise → Für wen → Und außerdem → Screens → Daten → FAQ → Download)
+│                         Zustandsleiter, Set-Ansicht mit Filter (SetDetailDemo), Widget in allen Größen
+│                         (WidgetDemo), Ringe, Kurve …
+├── components/sections/  Die Abschnitte der Startseite in Lesereihenfolge (Hero → Zahlen → Scannen → Sammlung →
+│                         Sets → Preise → Für wen → Und außerdem → Screens → Daten → FAQ → Download)
 ├── scripts/              reveal.ts (Einblenden beim Scrollen), licht.ts (Lichtpunkt unter der Maus auf Glasflächen)
 ├── styles/global.css     Formsprache der App (Theme.swift), als CSS
 └── assets/               App-Symbol und Screenshots (werden beim Bauen in AVIF/WebP umgerechnet)
 ```
 
 Alles Interaktive ist reine Zugabe: Ohne JavaScript steht jede Demo in ihrem Endzustand, jede Kachel
-ist lesbar, nichts fehlt. Mit JavaScript lassen sich Karte und Modus der Scanner-Demo wählen, der
-Schieber ziehen, die Zustandsleiter bedienen, die Set-Ansicht filtern, die Kurve abtasten, das Widget
-umschalten, „Preise ausblenden“ umlegen (die Kacheln des Abschnitts ziehen mit, wie in der App) und
+ist lesbar, nichts fehlt. Mit JavaScript lassen sich Karte und Modus der Scanner-Demo wählen, die
+Zustandsleiter bedienen, die Set-Ansicht filtern, die Kurve abtasten, das Widget umschalten, „Preise ausblenden“ umlegen (die Kacheln des Abschnitts ziehen mit, wie in der App) und
 jeder Screenshot groß öffnen. Alles davon geht auch mit Tastatur; `prefers-reduced-motion` schaltet
 Bewegung ab.
 

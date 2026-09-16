@@ -24,8 +24,7 @@ const gemessen = [24, 25, 26, 27, 28, 29, 30];
     <div class="section-head prices__head reveal">
       <h2 class="h2">Preise, die du einordnen kannst.</h2>
       <p class="lead">
-        Aus Cardmarkets öffentlicher Tagesliste, in Euro. Durchschnitte tatsächlicher Verkäufe vom
-        europäischen Markt – keine Angebote, keine Umrechnung aus Dollar.
+        Cardmarket-Preise in Euro – Durchschnitte echter Verkäufe vom europäischen Markt, jeden Tag neu.
       </p>
     </div>
 
@@ -36,13 +35,13 @@ const gemessen = [24, 25, 26, 27, 28, 29, 30];
           <p class="eyebrow">Marktwert</p>
           <p class="prices__big num">2.733,53 €</p>
           <p class="prices__delta num"><Icon name="arrow-up-right" size={11} stroke={3} />+283,17 € <span>+10 %</span></p>
-          <p class="prices__small">Trend × Menge × Zustandsfaktor. Was Verkäufer aufrufen.</p>
+          <p class="prices__small">Was Verkäufer für deine Karten aufrufen.</p>
         </div>
         <div class="prices__two-col">
           <p class="eyebrow">Sofortverkauf</p>
           <p class="prices__big num">1.101,28 €</p>
           <p class="prices__delta prices__delta--muted">abzüglich 5 % Gebühr</p>
-          <p class="prices__small">Tiefstpreis × Menge × Zustandsfaktor. Was du beim schnellen Verkauf ungefähr bekommst.</p>
+          <p class="prices__small">Was du beim schnellen Verkauf ungefähr bekommst.</p>
         </div>
       </div>
 
@@ -78,28 +77,21 @@ const gemessen = [24, 25, 26, 27, 28, 29, 30];
         </div>
         <p class="prices__legend">
           <Icon name="info" size={13} stroke={2} />
-          7 von 31 Tagen gemessen (Punkte). Der Rest ist aus den Cardmarket-Durchschnitten rekonstruiert.
+          Punkte: von der App gemessen. Linie: aus Cardmarkets Durchschnitten ergänzt.
         </p>
       </div>
 
       <ul class="prices__list reveal" style="--delay:.22s">
         <li>
-          <strong>Der Verlauf wird selbst aufgezeichnet.</strong> Die Datenquelle liefert keinen – also
-          hält die App jeden Tag den Stand fest, auch im Hintergrund. Fehlende Tage werden rekonstruiert
-          und als solche gekennzeichnet, mit einem <span class="num">~</span> davor.
+          <strong>Wertverlauf deiner Sammlung.</strong> Die App hält den Stand jeden Tag fest – so siehst du,
+          wohin es geht, über den Monat und darüber hinaus.
         </li>
         <li>
-          <strong>Größte Bewegungen</strong> in 7 oder 30 Tagen, sortiert nach Auswirkung in Euro – eine
-          Karte mit +40 % auf 0,05 € bewegt nichts.
+          <strong>Größte Bewegungen</strong> der Woche, sortiert nach Euro – damit +40 % auf 0,05 € nicht
+          oben stehen.
         </li>
         <li>
-          <strong>Kurve abtasten.</strong> Finger auflegen, ziehen – über der Kurve stehen Wert und Datum
-          des nächstliegenden Tages. Dieselbe Geste wie in jeder Kurs-App.
-        </li>
-        <li>
-          <strong>Ehrlich benannt:</strong> Preise sind nicht nach Sprache getrennt, für deutsche Karten ist
-          der Wert eine Näherung. Nicht jede Karte hat bei Cardmarket ein Produkt – dort trägst du einen
-          eigenen Wert ein.
+          <strong>Kurve abtasten.</strong> Finger auflegen, ziehen – Wert und Datum stehen über der Kurve.
         </li>
       </ul>
     </div>

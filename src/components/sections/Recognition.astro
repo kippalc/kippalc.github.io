@@ -1,6 +1,6 @@
 ---
 /**
- * Was nach dem Scan dasteht. Das Ergebnisfeld groß, daneben die vier Dinge,
+ * Was nach dem Scan dasteht. Das Ergebnisfeld groß, daneben die drei Dinge,
  * die es beantwortet – nach `CardResultView.swift` und `BestandZeile.swift`.
  */
 import Icon from '../Icon.astro';
@@ -9,34 +9,29 @@ import ResultPanel from '../ResultPanel.astro';
 const punkte = [
   {
     icon: 'sparkle',
-    titel: 'Normaldruck oder Reverse Holo – mit eigenem Preis',
-    text: 'Die Kamera sieht die Folie nicht, du tippst sie an. Bei Dragoran aus „151“ macht das den Unterschied zwischen 0,63 € und 3,87 €.',
+    titel: 'Normal oder Reverse Holo – jede mit eigenem Preis',
+    text: 'Ein Tipp, und der Preis stimmt für deinen Druck. Bei Dragoran aus „151“ heißt das 0,63 € oder 3,87 €.',
   },
   {
     icon: 'check-circle',
     titel: 'Ob du sie schon hast, steht sofort dabei',
-    text: 'Stückzahl und Zustände aus deiner Sammlung, „Auf deiner Wunschliste“ oder „Fehlt noch · 99/165 im Set“ – die Frage, die man sich am Stand als Erstes stellt.',
-  },
-  {
-    icon: 'search',
-    titel: 'Cardmarket, eBay und was zuletzt wirklich gezahlt wurde',
-    text: 'Drei Suchen direkt aus dem Scan. Beim Tauschen ist der Scanner das Preisschild – und der Trend nur die halbe Auskunft.',
+    text: '„In der Sammlung: 2×“, „Auf deiner Wunschliste“ oder „Fehlt noch“ – die Frage, die man sich am Stand als Erstes stellt.',
   },
   {
     icon: 'plus',
     titel: 'Aufnehmen mit einem Tipp',
-    text: 'Als lose Karte, als gegradete Karte im Gehäuse – oder erst mal vormerken, mit dem Preis von heute.',
+    text: 'In die Sammlung, als gegradete Karte oder erst mal auf die Wunschliste – mit dem Preis von heute. Cardmarket und eBay liegen einen Tipp daneben.',
   },
 ] as const;
 ---
 
-<section class="rec section" id="erkennen">
+<section class="rec section" id="scannen">
   <div class="container rec__grid">
     <div class="section-head rec__head reveal">
-      <h2 class="h2">Alles, was du wissen willst. Auf einen Blick.</h2>
+      <h2 class="h2">Scannen. Und alles über die Karte wissen.</h2>
       <p class="lead">
-        Name, Set, Nummer und der Marktwert von heute. Und darunter das, was eine Preisabfrage allein
-        nicht beantwortet.
+        Name, Set, Nummer und der Marktwert von heute – und ob du die Karte schon hast. Kein Tippen,
+        kein Suchen.
       </p>
     </div>
 
