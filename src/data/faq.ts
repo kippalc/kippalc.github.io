@@ -16,7 +16,7 @@ export const FAQ: Frage[] = [
   {
     frage: 'Woher stammen die Preise?',
     antwort:
-      'Aus Cardmarkets öffentlicher Tagesliste, in Euro – Durchschnitte tatsächlicher Verkäufe, keine Angebote. Reverse-Holo-Karten haben ihren eigenen Preis. Die Preise sind nicht nach Sprache getrennt; für deutsche Karten ist der Wert deshalb eine Näherung. Hat Cardmarket kein Produkt zu einer Karte, trägst du einen eigenen Wert ein.',
+      'Aus der öffentlichen Tagesliste des europäischen Marktplatzes Cardmarket, in Euro – Durchschnitte tatsächlicher Verkäufe, keine Angebote. Reverse-Holo-Karten haben ihren eigenen Preis. Die Preise sind nicht nach Sprache getrennt; für deutsche Karten ist der Wert deshalb eine Näherung. Gibt es zu einer Karte keinen Marktpreis, trägst du einen eigenen Wert ein.',
   },
   {
     frage: 'Kostet KippScan etwas?',

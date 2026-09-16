@@ -20,7 +20,7 @@ export const SITE = {
   /** Untertitel wie im Store-Eintrag – 30 Zeichen. */
   tagline: 'Karten per Nummer erkennen',
   description:
-    'Pokémon-Karten mit dem iPhone scannen, sofort den Cardmarket-Preis in Euro sehen und die ganze Sammlung führen – ohne Konto, ohne Tracking, kostenlos.',
+    'Pokémon-Karten mit dem iPhone scannen, sofort den Marktpreis in Euro sehen und die ganze Sammlung führen – ohne Konto, ohne Tracking, kostenlos.',
   /** Mindestversion laut Projekt (`IPHONEOS_DEPLOYMENT_TARGET`). */
   minIOS: '17',
   version: '1.0',
