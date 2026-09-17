@@ -32,7 +32,10 @@ export const ANBIETER = {
   strasse: 'Neuer Traßweg 35',
   ort: '51427 Bergisch Gladbach',
   land: 'Deutschland',
-  email: 'thomas@kipp-alcantara.de',
+  /** Allgemeiner Kontakt – Impressum und Datenschutzerklärung. */
+  email: 'kontakt@kippscan.de',
+  /** Für Fragen zur App – Fußzeile, Download, App Store. */
+  supportEmail: 'support@kippscan.de',
   telefon: '+49\u00a0172\u00a08610360',
   telefonLink: 'tel:+491728610360',
   umsatzsteuerId: 'DE293405370',
