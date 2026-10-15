@@ -1,7 +1,7 @@
 ---
 /**
  * Die Datenschutzerklärung – inhaltlich unverändert aus `Web/datenschutz.html`
- * des App-Projekts übernommen (Stand 16. September 2026). Diese Adresse ist in
+ * des App-Projekts übernommen (Stand 15. Oktober 2026). Diese Adresse ist in
  * der App und im Store-Eintrag hinterlegt und muss bestehen bleiben.
  */
 import Legal from '../layouts/Legal.astro';
@@ -12,7 +12,7 @@ import { ANBIETER } from '../data/site';
   title="Datenschutzerklärung"
   description="Datenschutzerklärung für die iPhone-App KippScan und diese Website: kein Konto, kein Tracking, alle Daten bleiben auf dem Gerät."
   path="/datenschutz.html"
-  untertitel="Für die App KippScan und für diese Website. Stand: 16. September 2026"
+  untertitel="Für die App KippScan und für diese Website. Stand: 15. Oktober 2026"
 >
   <h2>1. Verantwortlicher</h2>
   <address>
@@ -61,7 +61,9 @@ import { ANBIETER } from '../data/site';
 
   <h3>3.3 Abruf von Kartendaten, Preisen und Bildern</h3>
   <p>
-    Kartennamen, Sets und Nummern liegen als Liste mit der App auf dem Gerät. Preise, Kartenbilder und
+    Kartennamen, Sets und Nummern liegen als Liste mit der App auf dem Gerät. Eine aktualisierte Fassung
+    dieser Liste (etwa mit neu erschienenen Sets) lädt die App höchstens einmal täglich von kippscan.de nach.
+    Preise, Kartenbilder und
     ergänzende Angaben werden bei Bedarf von folgenden Diensten abgerufen. Dabei wird – wie bei jedem Abruf
     im Internet – Ihre IP-Adresse an den jeweiligen Anbieter übermittelt, dazu technische Angaben wie
     Zeitpunkt und angefragte Adresse.
@@ -72,6 +74,11 @@ import { ANBIETER } from '../data/site';
         <tr><th scope="col">Dienst</th><th scope="col">Wofür</th><th scope="col">Datenschutzhinweise</th></tr>
       </thead>
       <tbody>
+        <tr>
+          <td>kippscan.de<br /><span class="leise">bereitgestellt über GitHub Pages</span></td>
+          <td>aktualisierte Kartenliste (ohne Angaben zu Ihnen oder Ihrer Sammlung)</td>
+          <td>siehe <a href="#website">Abschnitt 5</a></td>
+        </tr>
         <tr>
           <td>TCGdex<br /><span class="leise">api.tcgdex.net, assets.tcgdex.net</span></td>
           <td>Kartendaten und Kartenbilder</td>
@@ -99,7 +106,10 @@ import { ANBIETER } from '../data/site';
     Angemessenheitsbeschluss der EU-Kommission zum EU-US Data Privacy Framework oder auf
     Standardvertragsklauseln des jeweiligen Anbieters.
   </p>
-  <p>Ich erhalte von diesen Abrufen keine Kenntnis und keine Daten.</p>
+  <p>
+    Ich erhalte von diesen Abrufen keine Kenntnis und keine Daten. Das gilt auch für kippscan.de: Die
+    Zugriffsprotokolle dort führt allein GitHub, ich erhalte sie nicht.
+  </p>
 
   <h3>3.4 Links zu eBay (Werbelinks)</h3>
   <p>
@@ -136,7 +146,7 @@ import { ANBIETER } from '../data/site';
     (etwa Zahl der Ladevorgänge).
   </p>
 
-  <h2>5. Diese Website</h2>
+  <h2 id="website">5. Diese Website</h2>
   <p>
     Die Seiten werden über GitHub Pages bereitgestellt (GitHub, Inc., 88 Colin P. Kelly Jr. Street, San
     Francisco, CA 94107, USA). Beim Aufruf verarbeitet GitHub technisch notwendige Zugriffsdaten wie

@@ -87,6 +87,17 @@ oder den mitgelieferten Workflow benutzen (`.github/workflows/deploy.yml`): Er b
 Push auf `main` und veröffentlicht `dist/` über GitHub Pages (in den Repository-Einstellungen
 unter *Pages* die Quelle auf *GitHub Actions* stellen).
 
+## Datenpaket für die App (`public/daten/`)
+
+Unter `https://kippscan.de/daten/v1/` liegt der Kartenindex zum Nachladen: `manifest.json`
+(Ed25519-signierter Umschlag) und `kartenindex-de-<sha12>.json`. Die App fragt höchstens einmal am
+Tag das Manifest ab und lädt den Index nur, wenn er neuer ist als ihr eigener (`Datenpaket.swift`
+im App-Projekt). Erzeugt wird beides **nur** im App-Projekt mit `python3 Tools/datenpaket.py bauen`
+(der private Schlüssel liegt dort in `Tools/.datenpaket/`); hier wird nichts von Hand geändert.
+Veröffentlichen: `build/datenpaket/daten/` des App-Projekts nach `public/daten/` kopieren, die
+vorletzte Indexdatei bleibt eine Runde liegen (GitHub Pages hält das Manifest bis zu zehn Minuten
+im Zwischenspeicher), committen, pushen.
+
 ## Social-Preview-Bild
 
 `public/og.png` (1200 × 630) entsteht aus der Vorlage `/intern/og`:
@@ -108,5 +119,5 @@ npm run dev
   (Glurak-ex 151 Nr. 199, Dragoran 151 Nr. 149, Mew-ex 151 Nr. 205). Sie dürfen veralten –
   sie stehen als Beispiel da, mit Datum.
 - Die **Datenschutzerklärung** ist inhaltlich unverändert aus dem App-Projekt übernommen
-  (Stand 16. September 2026). Ändert sich etwas an der App, dort und hier gemeinsam anpassen und
+  (Stand 15. Oktober 2026). Ändert sich etwas an der App, dort und hier gemeinsam anpassen und
   das Datum mitziehen.
