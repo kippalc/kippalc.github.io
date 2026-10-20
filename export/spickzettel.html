@@ -1,0 +1,76 @@
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Spickzettel – GitHub in zwei Tagen</title><style>
+@page{size:A4;margin:14mm}
+*{box-sizing:border-box}
+body{font:11pt/1.45 "Atkinson Hyperlegible",system-ui,-apple-system,"Segoe UI",sans-serif;color:#151829;background:#fff;margin:0}
+main{max-width:190mm;margin:0 auto;padding:8mm}
+h2{font-size:24pt;margin:0 0 2mm}h3{font-size:14pt;margin:7mm 0 2mm;color:#2445c4;break-after:avoid}
+.lead{color:#566079;margin:0}
+.prompt{border:1px solid #d9dce8;border-left:4px solid #2445c4;border-radius:6px;padding:2mm 3mm;margin:0 0 2mm;break-inside:avoid}
+q{quotes:"„" "“"}
+table{width:100%;border-collapse:collapse;font-size:10pt}
+th,td{text-align:left;padding:1.6mm 2mm;border-bottom:1px solid #d9dce8;vertical-align:top}
+th{background:#f4f5f9}tr{break-inside:avoid}
+code{font:9.5pt ui-monospace,Menlo,Consolas,monospace;background:#f1f2f7;padding:0 1mm;border-radius:3px}
+.rk{font-size:9pt;font-weight:700;padding:.3mm 2mm;border-radius:99px;white-space:nowrap}
+.ok{background:#e2f3e6;color:#1c7638}.mid{background:#fff2d6;color:#7f5300}.hi{background:#fbe4e5;color:#b0222b}
+-webkit-print-color-adjust:exact
+body{-webkit-print-color-adjust:exact;print-color-adjust:exact}</style></head><body><main>
+      
+      <h2>Spickzettel</h2>
+      <p class="lead">Alles zum Nachschlagen auf einer Seite. Lass sie offen, wenn du mit Claude arbeitest.</p>
+
+      <h3>Sätze für Claude</h3>
+      <div class="prompts">
+        <div class="prompt"><q>Arbeite auf einem neuen Branch, nicht auf main.</q></div>
+        <div class="prompt"><q>Erkläre mir vor jedem Git-Befehl in einem Satz, was er tut.</q></div>
+        <div class="prompt"><q>Ist alles committet und gepusht? Zeig mir git status und erklär mir die Ausgabe.</q></div>
+        <div class="prompt"><q>Öffne einen Pull Request nach main. Beschreibung auf Deutsch: was, warum, und wie ich es prüfen kann.</q></div>
+        <div class="prompt"><q>Erklär mir den Diff dieses PR Datei für Datei in einfachen Worten. Was könnte schiefgehen?</q></div>
+        <div class="prompt"><q>Der Check ist rot. Lies das Log, erklär mir die Ursache und behebe sie. Schalte keinen Check ab.</q></div>
+        <div class="prompt"><q>Hol main in deinen Branch und löse die Konflikte. Erklär mir jede Entscheidung. Kein Force-Push.</q></div>
+        <div class="prompt"><q>Mach den letzten gemergten PR mit git revert rückgängig, über einen neuen PR.</q></div>
+        <div class="prompt"><q>Zeig mir git log --oneline --graph -15 und erklär mir das Bild.</q></div>
+      </div>
+
+      <h3>Git-Befehle zum Wiedererkennen</h3>
+      <p>Tippen musst du sie nicht. Aber wenn Claude sie ausführt oder um Erlaubnis fragt, weißt du, was passiert.</p>
+      <div class="tbl"><table>
+        <thead><tr><th>Befehl</th><th>Was er tut</th><th>Risiko</th></tr></thead>
+        <tbody>
+          <tr><td><code>git status</code></td><td>Zeigt geänderte Dateien und ob du ahead oder behind bist</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git log --oneline</code></td><td>Liste der Commits, neueste oben</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git diff</code></td><td>Zeigt noch nicht committete Änderungen</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git fetch</code></td><td>Schaut auf GitHub nach Neuem, baut nichts ein</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git add</code></td><td>Legt Änderungen in den Staging-Bereich</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git commit -m "…"</code></td><td>Speichert einen Commit mit Nachricht</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git switch -c name</code></td><td>Neuen Branch anlegen und wechseln</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git switch main</code></td><td>Auf main wechseln</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git stash</code></td><td>Legt Änderungen kurz beiseite, <code>git stash pop</code> holt sie zurück</td><td><span class="rk ok">harmlos</span></td></tr>
+          <tr><td><code>git pull</code></td><td>Holt neue Commits und baut sie ein</td><td><span class="rk mid">ändert</span></td></tr>
+          <tr><td><code>git merge</code></td><td>Führt einen Branch in den aktuellen</td><td><span class="rk mid">ändert</span></td></tr>
+          <tr><td><code>git push</code></td><td>Schickt Commits zu GitHub. Auf main bei dir: live</td><td><span class="rk mid">ändert</span></td></tr>
+          <tr><td><code>git revert &lt;hash&gt;</code></td><td>Fügt einen Commit hinzu, der einen alten umkehrt</td><td><span class="rk mid">ändert</span></td></tr>
+          <tr><td><code>git restore</code></td><td>Verwirft nicht committete Änderungen endgültig</td><td><span class="rk hi">Vorsicht</span></td></tr>
+          <tr><td><code>git rebase</code></td><td>Schreibt Commits auf einen neuen Ausgangspunkt um</td><td><span class="rk hi">Vorsicht</span></td></tr>
+          <tr><td><code>git reset --hard</code></td><td>Setzt alles auf einen Stand zurück, nicht Committetes ist weg</td><td><span class="rk hi">gefährlich</span></td></tr>
+          <tr><td><code>git clean -fd</code></td><td>Löscht alle Dateien, die Git nicht kennt</td><td><span class="rk hi">gefährlich</span></td></tr>
+          <tr><td><code>git push --force</code></td><td>Überschreibt die Geschichte auf GitHub</td><td><span class="rk hi">gefährlich</span></td></tr>
+        </tbody>
+      </table></div>
+
+      <h3>Wo finde ich was auf GitHub</h3>
+      <div class="tbl"><table>
+        <thead><tr><th>Ich suche</th><th>Dort</th></tr></thead>
+        <tbody>
+          <tr><td>Die Geschichte</td><td>Code → „Commits“ rechts über der Dateiliste</td></tr>
+          <tr><td>Einen anderen Branch</td><td>Code → Branch-Auswahl oben links</td></tr>
+          <tr><td>Ob die Veröffentlichung lief</td><td>Actions</td></tr>
+          <tr><td>Eine alte Fassung einer Datei</td><td>Datei öffnen → History</td></tr>
+          <tr><td>Einen gemergten PR zum Zurücknehmen</td><td>Pull requests → Closed</td></tr>
+          <tr><td>Pages und eigene Domain</td><td>Settings → Pages</td></tr>
+          <tr><td>Branch-Schutz</td><td>Settings → Rules → Rulesets</td></tr>
+          <tr><td>Schlüssel für Workflows</td><td>Settings → Secrets and variables → Actions</td></tr>
+          <tr><td>Claudes Zugriff auf Repos</td><td>Dein Profil → Settings → Applications → Claude</td></tr>
+        </tbody>
+      </table></div>
+    </main></body></html>
